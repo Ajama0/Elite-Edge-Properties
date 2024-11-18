@@ -4,12 +4,27 @@ package com.example.Elite.Edge.Properties.Model;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@NoArgsConstructor
 @Entity
 public class Units {
 
+    public Units(String unitNumber, unitStatus unitStatus, String floorNumber,
+                 double rentprice, double unitvalue, unitType unitType, Integer numberofrooms,
+                 double deposit, Property property) {
+        this.unitNumber = unitNumber;
+        this.unitStatus = unitStatus;
+        FloorNumber = floorNumber;
+        this.rentprice = rentprice;
+        this.unitvalue = unitvalue;
+        this.unitType = unitType;
+        this.numberofrooms = numberofrooms;
+        this.deposit = deposit;
+        this.property = property;
+    }
 
     @Id
     @SequenceGenerator(name = "units_sequence",
@@ -67,21 +82,133 @@ public class Units {
     @JoinColumn(name = "Landlord_id")
     private Landlord landlord;
 
-    @OneToOne
-    @JoinColumn(name = "tenant_id")
+    @OneToOne(mappedBy = "units")
     private Tenants tenant;   //remove this, the tenant cant exist without a unit_id, hence should be the owning side and make it bidrectional
 
     @OneToMany(mappedBy = "units")
     private List<Lease> lease;
 
 
+    public String getUnitNumber() {
+        return unitNumber;
+    }
 
+    public unitStatus getUnitStatus() {
+        return unitStatus;
+    }
 
+    public String getFloorNumber() {
+        return FloorNumber;
+    }
 
+    public double getRentprice() {
+        return rentprice;
+    }
 
+    public double getUnitvalue() {
+        return unitvalue;
+    }
 
+    public unitType getUnitType() {
+        return unitType;
+    }
 
+    public Integer getNumberofrooms() {
+        return numberofrooms;
+    }
 
+    public double getDeposit() {
+        return deposit;
+    }
 
+    public Long getId() {
+        return id;
+    }
 
+    public Property getProperty() {
+        return property;
+    }
+
+    public Landlord getLandlord() {
+        return landlord;
+    }
+
+    public Tenants getTenant() {
+        return tenant;
+    }
+
+    public List<Lease> getLease() {
+        return lease;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUnitNumber(String unitNumber) {
+        this.unitNumber = unitNumber;
+    }
+
+    public void setUnitStatus(com.example.Elite.Edge.Properties.Enums.unitStatus unitStatus) {
+        this.unitStatus = unitStatus;
+    }
+
+    public void setFloorNumber(String floorNumber) {
+        FloorNumber = floorNumber;
+    }
+
+    public void setRentprice(double rentprice) {
+        this.rentprice = rentprice;
+    }
+
+    public void setUnitvalue(double unitvalue) {
+        this.unitvalue = unitvalue;
+    }
+
+    public void setUnitType(com.example.Elite.Edge.Properties.Enums.unitType unitType) {
+        this.unitType = unitType;
+    }
+
+    public void setNumberofrooms(Integer numberofrooms) {
+        this.numberofrooms = numberofrooms;
+    }
+
+    public void setDeposit(double deposit) {
+        this.deposit = deposit;
+    }
+
+    public void setProperty(Property property) {
+        this.property = property;
+    }
+
+    public void setLandlord(Landlord landlord) {
+        this.landlord = landlord;
+    }
+
+    public void setTenant(Tenants tenant) {
+        this.tenant = tenant;
+    }
+
+    public void setLease(List<Lease> lease) {
+        this.lease = lease;
+    }
+
+    @Override
+    public String toString() {
+        return "Units{" +
+                "id=" + id +
+                ", unitNumber='" + unitNumber + '\'' +
+                ", unitStatus=" + unitStatus +
+                ", FloorNumber='" + FloorNumber + '\'' +
+                ", rentprice=" + rentprice +
+                ", unitvalue=" + unitvalue +
+                ", unitType=" + unitType +
+                ", numberofrooms=" + numberofrooms +
+                ", deposit=" + deposit +
+                ", property=" + property +
+                ", landlord=" + landlord +
+                ", tenant=" + tenant +
+                ", lease=" + lease +
+                '}';
+    }
 }

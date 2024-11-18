@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -50,9 +51,16 @@ public class Tenants {
     @JoinColumn(name = "unit_id", nullable = false)
     private Units units;
 
+    @OneToMany(mappedBy = "Tenants")
+    private List<Lease> leases;
+
     // Getters and Setters
     public Long getId() {
         return id;
+    }
+
+    private List<Lease> getLeases(){
+        return leases;
     }
 
     public void setId(Long id) {
@@ -105,6 +113,10 @@ public class Tenants {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    private void setLeases(List<Lease>leases){
+        this.leases = leases;
     }
 
     public String getOccupation() {

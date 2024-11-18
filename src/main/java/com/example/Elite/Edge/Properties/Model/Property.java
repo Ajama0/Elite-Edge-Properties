@@ -60,6 +60,9 @@ public class Property {
     @OneToMany(mappedBy = "property")
     private List<Units> units;
 
+    @ManyToMany(mappedBy = "properties")
+    private List<PropertyOwner> propertyOwners;
+
 
     public Property() {
     }

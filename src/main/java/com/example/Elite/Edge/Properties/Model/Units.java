@@ -78,9 +78,7 @@ public class Units {
     @JoinColumn(name = "property_id")
     private Property property;
 
-    @ManyToOne
-    @JoinColumn(name = "Landlord_id")
-    private Landlord landlord;
+
 
     @OneToOne(mappedBy = "units")
     private Tenants tenant;   //remove this, the tenant cant exist without a unit_id, hence should be the owning side and make it bidrectional
@@ -127,10 +125,6 @@ public class Units {
 
     public Property getProperty() {
         return property;
-    }
-
-    public Landlord getLandlord() {
-        return landlord;
     }
 
     public Tenants getTenant() {
@@ -181,9 +175,7 @@ public class Units {
         this.property = property;
     }
 
-    public void setLandlord(Landlord landlord) {
-        this.landlord = landlord;
-    }
+
 
     public void setTenant(Tenants tenant) {
         this.tenant = tenant;
@@ -206,7 +198,6 @@ public class Units {
                 ", numberofrooms=" + numberofrooms +
                 ", deposit=" + deposit +
                 ", property=" + property +
-                ", landlord=" + landlord +
                 ", tenant=" + tenant +
                 ", lease=" + lease +
                 '}';

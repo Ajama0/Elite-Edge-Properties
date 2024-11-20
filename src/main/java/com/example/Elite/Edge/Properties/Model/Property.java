@@ -1,7 +1,7 @@
 package com.example.Elite.Edge.Properties.Model;
 
 
-import com.example.Elite.Edge.Properties.Enums.Type;
+import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -29,7 +29,8 @@ public class Property {
     private String address;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    @Column(name = "property_type")
+    private PropertyType propertyType;
 
     @Column(name = "property_name", nullable = false)
     private String propertyname;
@@ -67,12 +68,12 @@ public class Property {
     public Property() {
     }
 
-    public Property(String address, Type type, String propertyname, double propertyvalue,
+    public Property(String address, PropertyType propertyType, String propertyname, double propertyvalue,
                     Boolean parkingAvailable, String city, String state,
                     String zipcode, LocalDate purchaseDate,
                     Integer rating, String propertydescription) {
         this.address = address;
-        this.type = type;
+        this.propertyType = propertyType;
         this.propertyname = propertyname;
         this.propertyvalue = propertyvalue;
         this.parkingAvailable = parkingAvailable;
@@ -84,6 +85,14 @@ public class Property {
         this.propertydescription = propertydescription;
     }
 
+
+    public List<PropertyOwner> getPropertyOwners(){
+        return propertyOwners;
+    }
+
+    public void setPropertyOwners(List<PropertyOwner> propertyOwners){
+        this.propertyOwners = propertyOwners;
+    }
     public Long getId() {
         return Id;
     }
@@ -92,8 +101,8 @@ public class Property {
         return address;
     }
 
-    public Type getType() {
-        return type;
+    public PropertyType getType() {
+        return propertyType;
     }
 
     public String getPropertyname() {
@@ -140,8 +149,8 @@ public class Property {
         this.address = address;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(PropertyType propertyType) {
+        this.propertyType = propertyType;
     }
 
     public void setPropertyname(String propertyname) {
@@ -185,7 +194,7 @@ public class Property {
         return "Property{" +
                 "Id=" + Id +
                 ", address='" + address + '\'' +
-                ", type=" + type +
+                ", type=" + propertyType +
                 ", propertyname='" + propertyname + '\'' +
                 ", propertyvalue=" + propertyvalue +
                 ", parkingAvailable=" + parkingAvailable +

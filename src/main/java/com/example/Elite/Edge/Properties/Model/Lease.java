@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -51,12 +52,29 @@ public class Lease {
     @JoinColumn(name = "unit_id")
     private Units unit;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "tenant_id")
     private Tenants tenants;
 
     //payment and leases
-    //onetomany on the lease side
+    @OneToMany(mappedBy = "lease", cascade = CascadeType.ALL)
+    private List<Payments> payments;
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<Payments> getPayments() {
+        return payments;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPayments(List<Payments> payments) {
+        this.payments = payments;
+    }
 
     public LocalDate getStartDate() {
         return startDate;

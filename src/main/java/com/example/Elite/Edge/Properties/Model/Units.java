@@ -81,7 +81,7 @@ public class Units {
 
 
     @OneToOne(mappedBy = "units")
-    private Tenants tenant;   //remove this, the tenant cant exist without a unit_id, hence should be the owning side and make it bidrectional
+    private Tenants tenant;
 
     @OneToMany(mappedBy = "units")
     private List<Lease> lease;

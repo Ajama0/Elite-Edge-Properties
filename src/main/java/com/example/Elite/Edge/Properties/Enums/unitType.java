@@ -4,6 +4,6 @@ public enum unitType {
     APARTMENT,
     STUDIO,
     OFFICE,
-    RETIAL
+    RETAIL
 
 }

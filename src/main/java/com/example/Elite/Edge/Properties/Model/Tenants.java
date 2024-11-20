@@ -51,15 +51,15 @@ public class Tenants {
     @JoinColumn(name = "unit_id", nullable = false)
     private Units units;
 
-    @OneToMany(mappedBy = "Tenants")
-    private List<Lease> leases;
+    @OneToOne(mappedBy = "Tenants")
+    private Lease leases;
 
     // Getters and Setters
     public Long getId() {
         return id;
     }
 
-    private List<Lease> getLeases(){
+    private Lease getLeases(){
         return leases;
     }
 
@@ -115,7 +115,7 @@ public class Tenants {
         this.address = address;
     }
 
-    private void setLeases(List<Lease>leases){
+    private void setLeases(Lease leases){
         this.leases = leases;
     }
 
@@ -141,6 +141,10 @@ public class Tenants {
 
     public void setUnit(Units units) {
         this.units = units;
+    }
+
+    public Units getUnits() {
+        return units;
     }
 
     // Optional: Custom Constructor

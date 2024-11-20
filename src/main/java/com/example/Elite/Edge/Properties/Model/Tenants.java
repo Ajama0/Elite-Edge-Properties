@@ -149,7 +149,7 @@ public class Tenants {
 
     // Optional: Custom Constructor
     public Tenants(String firstName, String lastName, String email, String phone, LocalDate dob,
-                   String address, String occupation, Double income, Units units) {
+                   String address, String occupation, Double income) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -158,7 +158,6 @@ public class Tenants {
         this.address = address;
         this.occupation = occupation;
         this.income = income;
-        this.units = units;
     }
 
     @Override

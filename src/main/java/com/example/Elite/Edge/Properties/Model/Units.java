@@ -14,7 +14,7 @@ public class Units {
 
     public Units(String unitNumber, unitStatus unitStatus, String floorNumber,
                  double rentprice, double unitvalue, unitType unitType, Integer numberofrooms,
-                 double deposit, Property property) {
+                 double deposit ){
         this.unitNumber = unitNumber;
         this.unitStatus = unitStatus;
         FloorNumber = floorNumber;
@@ -23,7 +23,7 @@ public class Units {
         this.unitType = unitType;
         this.numberofrooms = numberofrooms;
         this.deposit = deposit;
-        this.property = property;
+
     }
 
     @Id

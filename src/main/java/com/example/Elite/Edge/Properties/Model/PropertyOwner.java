@@ -119,15 +119,13 @@ public class PropertyOwner{
 
 
     public PropertyOwner(String firstName, String lastName, String email, String address,
-                         LocalDate date, String phoneNumber,
-                         List<Property> properties) {
+                         LocalDate date, String phoneNumber) {
         FirstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
         this.date = date;
         this.phoneNumber = phoneNumber;
-        this.properties = properties;
     }
 
     @Override

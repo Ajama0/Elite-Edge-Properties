@@ -38,7 +38,7 @@ public class Lease {
     @Column(name = "termination_notice_period", nullable = true)
     private Integer terminationNoticePeriod;
 
-    @Column(name = "agreement_document", nullable = true)
+    @Column(name = "agreement_document")
     private String agreementDocument;
 
     @Column(name = "created_date", nullable = false, updatable = false)
@@ -160,17 +160,16 @@ public class Lease {
 
     public Lease(LocalDate startDate, LocalDate endDate, Double rentAmount, Double depositAmount,
                  Integer terminationNoticePeriod, String agreementDocument, LocalDate createdDate,
-                 LocalDate updatedDate, Units unit, Tenants tenants) {
+                 LocalDate updatedDate) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.rentAmount = rentAmount;
         this.depositAmount = depositAmount;
         this.terminationNoticePeriod = terminationNoticePeriod;
         this.agreementDocument = agreementDocument;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
-        this.unit = unit;
-        this.tenants = tenants;
+        this.createdDate = LocalDate.now();
+        this.updatedDate = LocalDate.now();
+
     }
 
     @Override

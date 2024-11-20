@@ -4,10 +4,7 @@ package com.example.Elite.Edge.Properties.Config;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
-import com.example.Elite.Edge.Properties.Model.Property;
-import com.example.Elite.Edge.Properties.Model.PropertyOwner;
-import com.example.Elite.Edge.Properties.Model.Tenants;
-import com.example.Elite.Edge.Properties.Model.Units;
+import com.example.Elite.Edge.Properties.Model.*;
 import com.example.Elite.Edge.Properties.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -102,6 +99,10 @@ public class Configuration {
             u1.setTenant(t1);
             t2.setUnit(u2);
             u2.setTenant(t2);
+
+            //lease
+            Lease l1 = new Lease(LocalDate.of(2024, Month.SEPTEMBER, 19),
+                    LocalDate.of(2026, Month.MAY, 1),2000, 1500,60,"Agreement.pdf",
 
 
 

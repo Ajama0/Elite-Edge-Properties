@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -58,7 +59,7 @@ public class Lease {
 
     //payment and leases
     @OneToMany(mappedBy = "lease", cascade = CascadeType.ALL)
-    private List<Payments> payments;
+    private List<Payments> payments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -159,8 +160,7 @@ public class Lease {
 
 
     public Lease(LocalDate startDate, LocalDate endDate, Double rentAmount, Double depositAmount,
-                 Integer terminationNoticePeriod, String agreementDocument, LocalDate createdDate,
-                 LocalDate updatedDate) {
+                 Integer terminationNoticePeriod, String agreementDocument) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.rentAmount = rentAmount;

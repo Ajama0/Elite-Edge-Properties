@@ -2,6 +2,7 @@ package com.example.Elite.Edge.Properties.Config;
 
 
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Enums.paymentStatus;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
 import com.example.Elite.Edge.Properties.Model.*;
@@ -59,16 +60,20 @@ public class Configuration {
                     "New York", "NY", "10001", LocalDate.now(), 5,
                     "A great property!");
 
+            propertyRepo.saveAll(List.of(p1,p2));
+
             //units
             Units u1 = new Units("101", unitStatus.VACANT, "5", 2000, 50000.00, unitType.STUDIO,
-                    2, 1500);
+                    2, 1500.00);
             u1.setProperty(p1);
 
 
             Units u2 = new Units("102", unitStatus.OCCUPIED, "6", 2500, 55000.00, unitType.APARTMENT,
-                    3, 2000);
+                    3, 2000.00);
 
             u2.setProperty(p2);
+
+            unitRepo.saveAll(List.of(u1,u2));
 
 
             //property owner and property relationship
@@ -85,6 +90,8 @@ public class Configuration {
             p1.setPropertyOwners(List.of(o1,o2));
             p2.setPropertyOwners(List.of(o1,o2));
 
+            propertyOwnerRepo.saveAll(List.of(o1,o2));
+
 
             //tenant
             Tenants t1 = new Tenants("david", "lenn", "davidl@example.com", "0748310820",
@@ -100,9 +107,60 @@ public class Configuration {
             t2.setUnit(u2);
             u2.setTenant(t2);
 
-            //lease
+            tenantsRepo.saveAll(List.of(t1,t2));
+
+            //leases
             Lease l1 = new Lease(LocalDate.of(2024, Month.SEPTEMBER, 19),
-                    LocalDate.of(2026, Month.MAY, 1),2000, 1500,60,"Agreement.pdf",
+                    LocalDate.of(2026, Month.MAY, 1),2000.00, 1500.00,60,"Agreement.pdf");
+
+            Lease l2 = new Lease(LocalDate.of(2024, Month.NOVEMBER, 19),
+                    LocalDate.of(2026, Month.AUGUST, 1),2500.00, 2000.00,60,"Agreement.pdf");
+
+
+
+
+            l1.setUnit(u1);
+            l1.setTenants(t1);
+            u1.setLease(List.of(l1));
+            t1.setLease(l1);
+
+            l2.setUnit(u2);
+            l2.setTenants(t2);
+            u2.setLease(List.of(l2));
+            t2.setLease(l2);
+
+            leaseRepo.saveAll(List.of(l1,l2));
+            //delete leases associated to a unit when tenant leaves(cascadeType.ALL)
+
+
+
+
+            //payments
+            Payments paym1 = new Payments("#TX-1BF332", 2000.00, paymentStatus.PENDING,
+                    "8654");
+
+            paym1.setLease(l1);
+            l1.setPayments(List.of(paym1));
+            paymentsRepo.save(paym1);
+
+
+           //All instances saved to the db
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

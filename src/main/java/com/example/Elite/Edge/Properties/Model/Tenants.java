@@ -51,16 +51,16 @@ public class Tenants {
     @JoinColumn(name = "unit_id", nullable = false)
     private Units units;
 
-    @OneToOne(mappedBy = "Tenants")
-    private Lease leases;
+    @OneToOne(mappedBy = "tenants")
+    private Lease lease;
 
     // Getters and Setters
     public Long getId() {
         return id;
     }
 
-    private Lease getLeases(){
-        return leases;
+    public Lease getLeases(){
+        return lease;
     }
 
     public void setId(Long id) {
@@ -115,8 +115,8 @@ public class Tenants {
         this.address = address;
     }
 
-    private void setLeases(Lease leases){
-        this.leases = leases;
+    public void setLease(Lease lease){
+        this.lease = lease;
     }
 
     public String getOccupation() {
@@ -175,4 +175,6 @@ public class Tenants {
                 ", unit=" + (units != null ? units.getId() : "null") +
                 '}';
     }
+
+
 }

@@ -83,7 +83,7 @@ public class Units {
     @OneToOne(mappedBy = "units")
     private Tenants tenant;
 
-    @OneToMany(mappedBy = "units")
+    @OneToMany(mappedBy = "unit")
     private List<Lease> lease;
 
 

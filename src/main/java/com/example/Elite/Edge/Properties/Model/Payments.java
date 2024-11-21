@@ -38,13 +38,11 @@ public class Payments {
 
 
     public Payments(String paymentReference, Double amount, paymentStatus status,
-                    String cardLastFour,
-                    Lease lease) {
+                    String cardLastFour) {
         this.paymentReference = paymentReference;
         this.amount = amount;
         this.status = status;
         this.cardLastFour = cardLastFour;
-        this.lease = lease;
     }
 
     public String getPaymentReference() {

@@ -46,7 +46,7 @@ public class PropertyOwner{
 
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "property_0wners_m2m",
             joinColumns = @JoinColumn(name = "property_id"),
             inverseJoinColumns = @JoinColumn(name = "owner_id")

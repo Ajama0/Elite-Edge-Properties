@@ -2,6 +2,7 @@ package com.example.Elite.Edge.Properties.Model;
 
 
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -61,7 +62,10 @@ public class Property {
     @OneToMany(mappedBy = "property")
     private List<Units> units;
 
-    @ManyToMany(mappedBy = "properties")
+
+    //add fetch type as lazy to ensure we dont return associated owners unless explicitly done
+    @ManyToMany(mappedBy = "properties", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<PropertyOwner> propertyOwners;
 
 

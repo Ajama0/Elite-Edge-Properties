@@ -4,6 +4,7 @@ package com.example.Elite.Edge.Properties.Model;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -58,12 +59,21 @@ public class Property {
     @Column(name = "property_description")
     private String propertydescription;
 
+    @Column(name = "accessed_timestamp")
+    private LocalDate accessedTimeStamp;
+
+    @Column(name = "created_at")
+    private LocalDate created_at;
+
+    @Column(name = "updated_at")
+    private LocalDate updated_at;
+
     //accessing the units associated with properties
     @OneToMany(mappedBy = "property")
     private List<Units> units;
 
 
-    //add fetch type as lazy to ensure we dont return associated owners unless explicitly done
+    //add fetch type as lazy to ensure we don't return associated owners unless explicitly done
     @ManyToMany(mappedBy = "properties", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<PropertyOwner> propertyOwners;
@@ -75,7 +85,8 @@ public class Property {
     public Property(String address, PropertyType propertyType, String propertyname, double propertyvalue,
                     Boolean parkingAvailable, String city, String state,
                     String zipcode, LocalDate purchaseDate,
-                    Integer rating, String propertydescription) {
+                    Integer rating, String propertydescription
+                    ) {
         this.address = address;
         this.propertyType = propertyType;
         this.propertyname = propertyname;
@@ -87,6 +98,9 @@ public class Property {
         this.purchaseDate = purchaseDate;
         this.rating = rating;
         this.propertydescription = propertydescription;
+        this.accessedTimeStamp = LocalDate.now();
+        this.created_at = LocalDate.now();
+        this.updated_at = LocalDate.now();
     }
 
 
@@ -99,6 +113,25 @@ public class Property {
     }
     public Long getId() {
         return Id;
+    }
+    public PropertyType getPropertyType() {
+        return propertyType;
+    }
+
+    public LocalDate getAccessedTimeStamp() {
+        return accessedTimeStamp;
+    }
+
+    public List<Units> getUnits() {
+        return units;
+    }
+
+    public LocalDate getCreated_at(){
+        return created_at;
+    }
+
+    public LocalDate getUpdated_at() {
+        return updated_at;
     }
 
     public String getAddress() {
@@ -147,6 +180,26 @@ public class Property {
 
     public void setId(Long id) {
         Id = id;
+    }
+
+    public void setCreated_at(LocalDate created_at) {
+        this.created_at = created_at;
+    }
+
+    public void setUpdated_at(LocalDate updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    public void setPropertyType(PropertyType propertyType) {
+        this.propertyType = propertyType;
+    }
+
+    public void setAccessedTimeStamp(LocalDate accessedTimeStamp) {
+        this.accessedTimeStamp = accessedTimeStamp;
+    }
+
+    public void setUnits(List<Units> units) {
+        this.units = units;
     }
 
     public void setAddress(String address) {

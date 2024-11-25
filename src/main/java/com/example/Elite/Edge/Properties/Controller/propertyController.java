@@ -4,13 +4,14 @@ package com.example.Elite.Edge.Properties.Controller;
 import com.example.Elite.Edge.Properties.Model.Property;
 import com.example.Elite.Edge.Properties.Service.propertyService;
 import com.example.Elite.Edge.Properties.apiWrapper.ApiResponse;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/Properties")
@@ -26,7 +27,7 @@ public class propertyController {
 
 
     @GetMapping(path = "/properties")
-    public ResponseEntity<ApiResponse> fetchAllProperties(){
+    public ResponseEntity<?> fetchAllProperties(){
         List<Property> getproperties = propertyservice.getAllProperties();
         return ResponseEntity.ok(new ApiResponse<>("success", getproperties));
 
@@ -34,7 +35,7 @@ public class propertyController {
 
 
     @GetMapping(path = "properties/{id}")
-    public ResponseEntity<ApiResponse> fetchPropertyById(@PathVariable Long id ){
+    public ResponseEntity<?> fetchPropertyById(@PathVariable Long id ){
         Property propertyById = propertyservice.getPropertyById(id);
         return ResponseEntity.ok(new ApiResponse<>("success",
                 propertyById));
@@ -45,6 +46,24 @@ public class propertyController {
         List<Property> propertyname = propertyservice.fetchByName(name);
         return ResponseEntity.ok(new ApiResponse<>("success", propertyname));
     }
+
+    @GetMapping(path = "retrieve/Aparment/Availablity/E/Type")
+    public ApiResponse<?> findRatingAndType(@RequestParam Integer rating,
+                                                         @RequestParam String type){
+        try {
+            List<Property> getAvailableTypes = propertyservice.fetchRatingAndType(
+                    rating, type
+            );
+        }catch (Exception e){
+            return new ApiResponse<>("error", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ApiResponse<>("success", HttpStatus.OK);
+
+
+    }
+
+
 
 
 

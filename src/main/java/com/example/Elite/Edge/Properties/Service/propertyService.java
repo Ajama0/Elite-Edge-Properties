@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.Service;
 
 
+import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Model.Property;
 import com.example.Elite.Edge.Properties.Repository.propertyRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,6 +34,7 @@ public class propertyService {
 
 
         }
+        new Property().setAccessedTimeStamp(LocalDate.now());
         return getProperties;
     }
 
@@ -41,6 +43,7 @@ public class propertyService {
                .orElseThrow(() -> new EntityNotFoundException(id + "does not exist"));
 
        propertyById.setAccessedTimeStamp(LocalDate.now());
+        PropertyRepository.save(propertyById);
 
        return propertyById;
 
@@ -60,7 +63,26 @@ public class propertyService {
 
     }
 
+    public PropertyType serializeEnum(String type){
+        return PropertyType.valueOf(type.toUpperCase());
+    }
 
 
+    public List<Property> fetchRatingAndType(Integer rating, String type) {
+        List<Property> retrieveAvailableTypes = PropertyRepository.findAll()
+                .stream()
+                .filter(property -> property.getRating().equals(rating) &&
+                        property.getType().equals(serializeEnum(type)) )
+                .collect(Collectors.toList());
+
+        if(retrieveAvailableTypes.isEmpty()){
+            throw new IllegalStateException("There are no matches for your record");
+        }
+        Property property = new Property();
+        property.setAccessedTimeStamp(LocalDate.now());
+        PropertyRepository.save(property);
+
+        return retrieveAvailableTypes;
+    }
 
 }

@@ -48,16 +48,18 @@ public class propertyController {
     }
 
     @GetMapping(path = "retrieve/Aparment/Availablity/E/Type")
-    public ApiResponse<?> findRatingAndType(@RequestParam Integer rating,
+    public ResponseEntity<?> findRatingAndType(@RequestParam Integer rating,
                                                          @RequestParam String type){
         try {
             List<Property> getAvailableTypes = propertyservice.fetchRatingAndType(
                     rating, type);
-            return new ApiResponse<>("success", HttpStatus.OK);
+            return ResponseEntity.ok(new ApiResponse<>("success", getAvailableTypes));
 
         }catch (Exception e){
-            return new ApiResponse<>("error", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
+
 
 
 

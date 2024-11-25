@@ -3,6 +3,7 @@ package com.example.Elite.Edge.Properties.Service;
 
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Model.Property;
+import com.example.Elite.Edge.Properties.Model.PropertyOwner;
 import com.example.Elite.Edge.Properties.Repository.propertyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,4 +84,16 @@ public class propertyService {
         return retrieveAvailableTypes;
     }
 
+    public List<PropertyOwner> fetchOwners(Long id) {
+        //get the property object associated with the current id.
+        //then access the owners associated that reference that property
+        //orElseThrow unwraps the optional from findbyid if a object exists
+        //hence no need to re-wrap it with optional
+
+        Property property = PropertyRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("Property doesnt exist"));
+
+        return property.getPropertyOwners();
+
+    }
 }

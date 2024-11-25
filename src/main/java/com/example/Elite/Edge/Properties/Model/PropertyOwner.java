@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -47,6 +48,7 @@ public class PropertyOwner{
 
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(name = "property_0wners_m2m",
             joinColumns = @JoinColumn(name = "property_id"),
             inverseJoinColumns = @JoinColumn(name = "owner_id")

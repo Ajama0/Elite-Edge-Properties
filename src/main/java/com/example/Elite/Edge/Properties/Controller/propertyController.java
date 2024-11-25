@@ -4,6 +4,7 @@ package com.example.Elite.Edge.Properties.Controller;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.Property;
+import com.example.Elite.Edge.Properties.Model.PropertyOwner;
 import com.example.Elite.Edge.Properties.Service.propertyService;
 import com.example.Elite.Edge.Properties.Wrapper.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping(path = "api/v1/Properties")
 public class propertyController {
 
+    //TODO add new custom exception handler to http methods
     private final propertyService propertyservice;
 
     @Autowired
@@ -51,8 +53,6 @@ public class propertyController {
     public ResponseEntity<?> findRatingAndType(@RequestParam Integer rating,
                                                          @RequestParam String type){
         try {
-
-
             List<Property> getAvailableTypes = propertyservice.fetchRatingAndType(
                     rating, Property.serializeEnum(type));
             return ResponseEntity.ok(new ApiResponse<>("success", getAvailableTypes));
@@ -62,16 +62,19 @@ public class propertyController {
         }
 
 
-
-
-
-
-
-
-
     }
 
+    @GetMapping(path = "property/{id}/owners")
+    public  ResponseEntity<Object> retrievePropertyOwners(@PathVariable Long id){
+        try{
+            List< PropertyOwner> propertyOwners = propertyservice.fetchOwners(id);
+            return ResponseEntity.ok( new ApiResponse<>("success",
+                    propertyOwners));
+        }catch (RuntimeException e){
+            throw new PropertyException("property owners for the id do not exist");
+        }
 
+    }
 
 
 

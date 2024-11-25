@@ -63,16 +63,14 @@ public class propertyService {
 
     }
 
-    public PropertyType serializeEnum(String type){
-        return PropertyType.valueOf(type.toUpperCase());
-    }
 
 
-    public List<Property> fetchRatingAndType(Integer rating, String type) {
+
+    public List<Property> fetchRatingAndType(Integer rating, PropertyType type) {
         List<Property> retrieveAvailableTypes = PropertyRepository.findAll()
                 .stream()
                 .filter(property -> property.getRating().equals(rating) &&
-                        property.getType().equals(serializeEnum(type)) )
+                        property.getType().equals(type) )
                 .collect(Collectors.toList());
 
         if(retrieveAvailableTypes.isEmpty()){

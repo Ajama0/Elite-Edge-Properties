@@ -1,23 +1,22 @@
 package com.example.Elite.Edge.Properties.Controller;
 
 
+import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.Property;
 import com.example.Elite.Edge.Properties.Service.propertyService;
-import com.example.Elite.Edge.Properties.apiWrapper.ApiResponse;
+import com.example.Elite.Edge.Properties.Wrapper.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/Properties")
 public class propertyController {
 
-    private propertyService propertyservice;
+    private final propertyService propertyservice;
 
     @Autowired
     public propertyController(propertyService propertyService){
@@ -47,17 +46,24 @@ public class propertyController {
         return ResponseEntity.ok(new ApiResponse<>("success", propertyname));
     }
 
-    @GetMapping(path = "retrieve/Aparment/Availablity/E/Type")
+    // TODO - double check logic again
+    @GetMapping(path = "retrieve/Apartment/Availability/E/Type")
     public ResponseEntity<?> findRatingAndType(@RequestParam Integer rating,
                                                          @RequestParam String type){
         try {
+
+
             List<Property> getAvailableTypes = propertyservice.fetchRatingAndType(
-                    rating, type);
+                    rating, Property.serializeEnum(type));
             return ResponseEntity.ok(new ApiResponse<>("success", getAvailableTypes));
 
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (RuntimeException e){
+            throw new PropertyException("ensure rating are type are selected properly");
         }
+
+
+
+
 
 
 

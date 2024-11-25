@@ -69,7 +69,8 @@ public class Property {
     private LocalDate updated_at;
 
     //accessing the units associated with properties
-    @OneToMany(mappedBy = "property")
+    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Units> units;
 
 
@@ -172,6 +173,10 @@ public class Property {
 
     public Integer getRating() {
         return rating;
+    }
+
+    public static PropertyType serializeEnum(String type){
+        return PropertyType.valueOf(type.toUpperCase());
     }
 
     public String getPropertydescription() {

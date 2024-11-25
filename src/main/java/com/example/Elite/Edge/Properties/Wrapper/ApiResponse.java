@@ -1,4 +1,4 @@
-package com.example.Elite.Edge.Properties.apiWrapper;
+package com.example.Elite.Edge.Properties.Wrapper;
 
 public class ApiResponse <T>{
 

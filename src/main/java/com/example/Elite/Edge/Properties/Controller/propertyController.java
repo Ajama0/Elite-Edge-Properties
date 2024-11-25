@@ -52,13 +52,13 @@ public class propertyController {
                                                          @RequestParam String type){
         try {
             List<Property> getAvailableTypes = propertyservice.fetchRatingAndType(
-                    rating, type
-            );
+                    rating, type);
+            return new ApiResponse<>("success", HttpStatus.OK);
+
         }catch (Exception e){
             return new ApiResponse<>("error", HttpStatus.BAD_REQUEST);
         }
 
-        return new ApiResponse<>("success", HttpStatus.OK);
 
 
     }

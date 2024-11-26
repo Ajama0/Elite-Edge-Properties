@@ -9,10 +9,13 @@ import com.example.Elite.Edge.Properties.Model.PropertyOwner;
 import com.example.Elite.Edge.Properties.Service.propertyService;
 import com.example.Elite.Edge.Properties.Wrapper.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -103,6 +106,37 @@ public class propertyController {
         }catch(RuntimeException runtimeException){
             throw new PropertyException("Property price could not be updated");
         }
+    }
+
+
+    //including description in the @PathVariable could affect url limit
+    //assign it to a request body map and retrieve the value of key as our description
+    //now you can handle the client request.
+    @PutMapping(value = "update-propertyDescription/{id}")
+    public ResponseEntity<ApiResponse<Object>>updateDescription(@PathVariable Long id,
+                                      @RequestBody Map<String, String> payload){
+
+        String description = payload.get("description");
+        try{
+            PropertyDTO propertyDTO = propertyservice.updateDescription(id, description);
+            return ResponseEntity.ok(new ApiResponse<>("Successfully updated",
+                    propertyDTO
+                    ));
+        }catch (RuntimeException runtimeException){
+            throw new PropertyException("Property with id: " + id + " could not be updated");
+        }
+
+    }
+
+
+    @DeleteMapping(value = "delete-property/{id}")
+    public ResponseEntity<ApiResponse<?>>deleteProperty(@PathVariable Long id){
+
+        propertyservice.DeleteProperty(id);
+        return ResponseEntity.ok(new ApiResponse<>("successfully deleted",null));
+
+
+
     }
 
 

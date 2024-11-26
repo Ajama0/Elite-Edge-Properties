@@ -145,11 +145,36 @@ public class propertyService {
             Property property1 =  PropertyRepository.save(property);
 
             return new PropertyDTO(property1);
+    }
 
+    @Transactional
+    public PropertyDTO updateDescription(Long id, String description) {
+        Property propertyId = PropertyRepository.findById(id)
+                .orElseThrow(()-> new PropertyException("id does not exist"));
 
+        if(propertyId.getPropertydescription().equals(description)){
+            throw new PropertyException("The description must be different to the previous one entered");
+        }
 
+        propertyId.setPropertydescription(description);
 
+        Property property  = PropertyRepository.save(propertyId);
 
+        return new PropertyDTO(property);
+
+    }
+
+    @Transactional
+    public void DeleteProperty(Long id) {
+        Optional<Property> deletePropertyId = PropertyRepository.findById(id);
+
+        if(deletePropertyId.isEmpty()){
+            throw new PropertyException(id + " does not exist");
+        }
+
+        Property getObj = deletePropertyId.get();
+
+        PropertyRepository.delete(getObj);
 
 
     }

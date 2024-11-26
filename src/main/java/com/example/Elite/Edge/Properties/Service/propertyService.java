@@ -7,7 +7,9 @@ import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.Property;
 import com.example.Elite.Edge.Properties.Model.PropertyOwner;
+import com.example.Elite.Edge.Properties.Model.Units;
 import com.example.Elite.Edge.Properties.Repository.propertyRepository;
+import com.example.Elite.Edge.Properties.Repository.unitRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.catalina.mapper.Mapper;
@@ -22,11 +24,13 @@ import java.util.stream.Collectors;
 @Service
 public class propertyService {
 
-    private propertyRepository  PropertyRepository;
+    private final propertyRepository  PropertyRepository;
+    private final unitRepository unitrepository;
 
     @Autowired
-    public propertyService(propertyRepository  PropertyRepository){
+    public propertyService(propertyRepository  PropertyRepository, unitRepository unitrepository){
         this.PropertyRepository = PropertyRepository;
+        this.unitrepository = unitrepository;
     }
 
 
@@ -173,8 +177,24 @@ public class propertyService {
         }
 
         Property getObj = deletePropertyId.get();
+        //deleting the associated units.
+        //deleting the associated property owners
+        //other owners could be associated to other properties
+        //hence we remove the association between owners and the property
 
+        List<PropertyOwner> associatedOwners = getObj.getPropertyOwners();
+
+        associatedOwners.forEach(owner -> associatedOwners.remove(getObj));
+        getObj.getPropertyOwners().clear();
+
+
+        List<Units> associatedUnits = getObj.getUnits();
+
+        unitrepository.deleteAll(associatedUnits);
         PropertyRepository.delete(getObj);
+
+
+
 
 
     }

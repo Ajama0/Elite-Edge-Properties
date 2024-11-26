@@ -1,16 +1,19 @@
 package com.example.Elite.Edge.Properties.Service;
 
 
+import com.example.Elite.Edge.Properties.DTO.PropertyDTO;
+import com.example.Elite.Edge.Properties.DTO.PropertyOnwerDto;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.Property;
 import com.example.Elite.Edge.Properties.Model.PropertyOwner;
 import com.example.Elite.Edge.Properties.Repository.propertyRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,6 +97,50 @@ public class propertyService {
                 .orElseThrow(()-> new IllegalArgumentException("Property doesnt exist"));
 
         return property.getPropertyOwners();
+
+    }
+
+    @Transactional
+    public PropertyDTO CreateProperty(PropertyDTO propertyDTO) {
+    //let's ensure the property doesn't already exist in our system
+       Optional<Property>CheckDuplicate = PropertyRepository.findByPropertyNameAndAddress(propertyDTO.getPropertyName(),
+               propertyDTO.getAddress());
+
+       if(CheckDuplicate.isPresent()){
+           throw new PropertyException("Record already exists!");
+       }
+
+       Property property = new Property(
+            propertyDTO.getAddress(),
+            propertyDTO.getPropertyType(),
+            propertyDTO.getPropertyName(),
+            propertyDTO.getPropertyValue(),
+            propertyDTO.getParkingAvailable(),
+            propertyDTO.getZipcode(),
+            propertyDTO.getState(),
+            propertyDTO.getCity(),
+            propertyDTO.getPurchaseDate(),
+            propertyDTO.getRating(),
+            propertyDTO.getPropertyDescription());
+
+            Property savedProperty = PropertyRepository.save(property);
+
+            //Map the property to a DTO to return to the user
+
+            PropertyDTO DtoReturn = new PropertyDTO(
+                    savedProperty.getAddress(),
+                    savedProperty.getPropertyType(),
+                    savedProperty.getPropertyname(),
+                    savedProperty.getPropertyvalue(),
+                    savedProperty.getParkingAvailable(),
+                    savedProperty.getZipcode(),
+                    savedProperty.getState(),
+                    savedProperty.getCity(),
+                    savedProperty.getPurchaseDate(),
+                    savedProperty.getRating(),
+                    savedProperty.getPropertydescription()
+            );
+            return DtoReturn;
 
     }
 }

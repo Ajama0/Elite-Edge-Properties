@@ -1,6 +1,5 @@
 package com.example.Elite.Edge.Properties.DTO;
 
-public class PropertyOwnerDto {
-
+public class PropertyOnwerDto {
 
 }

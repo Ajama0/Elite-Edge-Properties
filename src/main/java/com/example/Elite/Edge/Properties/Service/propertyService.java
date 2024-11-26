@@ -128,20 +128,7 @@ public class propertyService {
 
             //Map the property back to a DTO to return to the client
 
-            PropertyDTO DtoReturn = new PropertyDTO(
-                    savedProperty.getAddress(),
-                    savedProperty.getPropertyType(),
-                    savedProperty.getPropertyname(),
-                    savedProperty.getPropertyvalue(),
-                    savedProperty.getParkingAvailable(),
-                    savedProperty.getZipcode(),
-                    savedProperty.getState(),
-                    savedProperty.getCity(),
-                    savedProperty.getPurchaseDate(),
-                    savedProperty.getRating(),
-                    savedProperty.getPropertydescription()
-            );
-            return DtoReturn;
+           return new PropertyDTO(savedProperty);
 
     }
 

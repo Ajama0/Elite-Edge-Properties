@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.DTO;
 
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Model.Property;
 
 import java.time.LocalDate;
 
@@ -32,6 +33,20 @@ public class PropertyDTO {
         this.purchaseDate = purchaseDate;
         this.rating = rating;
         this.propertyDescription = propertyDescription;
+    }
+
+    public PropertyDTO(Property property){
+        this.address = property.getAddress();
+        this.propertyName = property.getPropertyname();
+        this.propertyType = property.getPropertyType();
+        this.propertyValue = property.getPropertyvalue();
+        this.parkingAvailable = property.getParkingAvailable();
+        this.city = property.getCity();
+        this.state = property.getState();
+        this.zipcode = property.getZipcode();
+        this.purchaseDate = property.getPurchaseDate();
+        this.rating = property.getRating();
+        this.propertyDescription = property.getPropertydescription();
     }
 
     public String getAddress() {

@@ -10,6 +10,7 @@ import com.example.Elite.Edge.Properties.Model.PropertyOwner;
 import com.example.Elite.Edge.Properties.Repository.propertyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -125,7 +126,7 @@ public class propertyService {
 
             Property savedProperty = PropertyRepository.save(property);
 
-            //Map the property to a DTO to return to the user
+            //Map the property back to a DTO to return to the client
 
             PropertyDTO DtoReturn = new PropertyDTO(
                     savedProperty.getAddress(),
@@ -141,6 +142,28 @@ public class propertyService {
                     savedProperty.getPropertydescription()
             );
             return DtoReturn;
+
+    }
+
+    public PropertyDTO PropertyPrice(Long id, double propertyValue) {
+        Property property = PropertyRepository.findById(id)
+                .orElseThrow(() -> new PropertyException("property does not exist"));
+
+            //ensure the same price is not being entered
+            if(property.getPropertyvalue() == propertyValue){
+                throw new PropertyException("The value of the property has already been set");
+            }
+
+            property.setPropertyvalue(propertyValue);
+            Property property1 =  PropertyRepository.save(property);
+
+            return new PropertyDTO(property1);
+
+
+
+
+
+
 
     }
 }

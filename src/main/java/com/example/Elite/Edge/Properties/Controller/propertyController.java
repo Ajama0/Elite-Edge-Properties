@@ -77,7 +77,7 @@ public class propertyController {
     //allow buying a property -> adding to property owner
     //creating a property
     @PostMapping(path = "create-property")
-    public ResponseEntity<ApiResponse>createProperty(@RequestBody PropertyDTO propertyDTO){
+    public ResponseEntity<ApiResponse<PropertyDTO>>createProperty(@RequestBody PropertyDTO propertyDTO){
        try {
           PropertyDTO property = propertyservice.CreateProperty(propertyDTO);
            return ResponseEntity.ok(new ApiResponse<>("successfully created!",
@@ -86,7 +86,26 @@ public class propertyController {
        }catch (RuntimeException runtimeException){
            throw new PropertyException("Property could not be created at this time");
        }
+
+
     }
+
+    //update price, update parking available,
+    //this would later be strictly allowed for Admins (Spring security)
+    @PutMapping(value = "/update/{id}/{price}")
+    public ResponseEntity<ApiResponse<Object>>UpdatePrice(@PathVariable Long id,
+            @PathVariable("price") double PropertyPrice){
+        try{
+            PropertyDTO updatedProperty = propertyservice.PropertyPrice(id,
+                    PropertyPrice);
+
+            return ResponseEntity.ok(new ApiResponse<>("success" , updatedProperty));
+        }catch(RuntimeException runtimeException){
+            throw new PropertyException("Property price could not be updated");
+        }
+    }
+
+
 
 
 

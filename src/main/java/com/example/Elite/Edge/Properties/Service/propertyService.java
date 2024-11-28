@@ -8,7 +8,6 @@ import com.example.Elite.Edge.Properties.Enums.Status;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.*;
-import com.example.Elite.Edge.Properties.Repository.propertyRepository;
 import com.example.Elite.Edge.Properties.Repository.UnitRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,11 +22,11 @@ import java.util.stream.Collectors;
 @Service
 public class propertyService {
 
-    private final propertyRepository  PropertyRepository;
+    private final com.example.Elite.Edge.Properties.Repository.PropertyRepository PropertyRepository;
 
 
     @Autowired
-    public propertyService(propertyRepository  PropertyRepository, UnitRepository unitrepository){
+    public propertyService(com.example.Elite.Edge.Properties.Repository.PropertyRepository PropertyRepository, UnitRepository unitrepository){
         this.PropertyRepository = PropertyRepository;
     }
 

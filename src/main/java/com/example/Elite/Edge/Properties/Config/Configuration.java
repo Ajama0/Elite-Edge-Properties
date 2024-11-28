@@ -18,14 +18,14 @@ public class Configuration {
     private final leaseRepository leaseRepo;
     private final paymentsRepository paymentsRepo;
     private final propertyOwnerRepository propertyOwnerRepo;
-    private final propertyRepository propertyRepo;
+    private final PropertyRepository propertyRepo;
     private final tenantsRepository tenantsRepo;
     private final UnitRepository unitRepo;
 
     @Autowired
     public Configuration(leaseRepository leaseRepo, paymentsRepository paymentsRepo,
                          propertyOwnerRepository propertyOwnerRepo,
-                         propertyRepository propertyRepo,
+                         PropertyRepository propertyRepo,
                          tenantsRepository tenantsRepo,
                          UnitRepository unitRepo
 
@@ -41,7 +41,7 @@ public class Configuration {
     @Bean
     CommandLineRunner commandLineRunner(leaseRepository leaseRepo, paymentsRepository paymentsRepo,
                                         propertyOwnerRepository propertyOwnerRepo,
-                                        propertyRepository propertyRepo,
+                                        PropertyRepository propertyRepo,
                                         tenantsRepository tenantsRepo, UnitRepository unitRepo){
 
         return args -> {

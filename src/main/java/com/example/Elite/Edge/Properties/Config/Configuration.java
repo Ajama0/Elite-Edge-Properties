@@ -20,14 +20,14 @@ public class Configuration {
     private final propertyOwnerRepository propertyOwnerRepo;
     private final propertyRepository propertyRepo;
     private final tenantsRepository tenantsRepo;
-    private final unitRepository unitRepo;
+    private final UnitRepository unitRepo;
 
     @Autowired
     public Configuration(leaseRepository leaseRepo, paymentsRepository paymentsRepo,
                          propertyOwnerRepository propertyOwnerRepo,
                          propertyRepository propertyRepo,
                          tenantsRepository tenantsRepo,
-                         unitRepository unitRepo
+                         UnitRepository unitRepo
 
                          ){
         this.leaseRepo = leaseRepo;
@@ -42,7 +42,7 @@ public class Configuration {
     CommandLineRunner commandLineRunner(leaseRepository leaseRepo, paymentsRepository paymentsRepo,
                                         propertyOwnerRepository propertyOwnerRepo,
                                         propertyRepository propertyRepo,
-                                        tenantsRepository tenantsRepo, unitRepository unitRepo){
+                                        tenantsRepository tenantsRepo, UnitRepository unitRepo){
 
         return args -> {
 

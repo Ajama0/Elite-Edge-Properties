@@ -16,13 +16,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/Properties")
-public class propertyController {
+public class PropertyController {
 
     //TODO add new custom exception handler to http methods
     private final propertyService propertyservice;
 
     @Autowired
-    public propertyController(propertyService propertyService){
+    public PropertyController(propertyService propertyService){
         this.propertyservice = propertyService;
     }
 

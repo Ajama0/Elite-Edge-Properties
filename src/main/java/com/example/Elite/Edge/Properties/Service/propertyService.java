@@ -9,7 +9,7 @@ import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.*;
 import com.example.Elite.Edge.Properties.Repository.propertyRepository;
-import com.example.Elite.Edge.Properties.Repository.unitRepository;
+import com.example.Elite.Edge.Properties.Repository.UnitRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +24,11 @@ import java.util.stream.Collectors;
 public class propertyService {
 
     private final propertyRepository  PropertyRepository;
-    private final unitRepository unitrepository;
+
 
     @Autowired
-    public propertyService(propertyRepository  PropertyRepository, unitRepository unitrepository){
+    public propertyService(propertyRepository  PropertyRepository, UnitRepository unitrepository){
         this.PropertyRepository = PropertyRepository;
-        this.unitrepository = unitrepository;
     }
 
 

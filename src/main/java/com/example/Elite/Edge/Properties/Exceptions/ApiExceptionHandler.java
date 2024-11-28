@@ -12,17 +12,20 @@ import java.time.ZonedDateTime;
 public class ApiExceptionHandler {
 
 
-    @ExceptionHandler(value = {PropertyException.class})
-    public ResponseEntity<?>HandleRequest(PropertyException propertyException){
+    @ExceptionHandler(value = {RuntimeException.class})
+    public ResponseEntity<?> HandleRequest(RuntimeException runtimeException) {
         ExceptionPayload exceptionPayload = new ExceptionPayload(
-                propertyException.getMessage(),
+                runtimeException.getMessage(),
                 HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now()
 
         );
 
         return new ResponseEntity<>(exceptionPayload, HttpStatus.BAD_REQUEST);
+
     }
 
 
+
 }
+

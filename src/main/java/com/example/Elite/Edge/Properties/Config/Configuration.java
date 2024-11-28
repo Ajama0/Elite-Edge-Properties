@@ -50,12 +50,12 @@ public class Configuration {
             Property p1 = new Property("address", PropertyType.RESIDENTIAL, "Avondale Apartments",
                     3000000.00, Boolean.TRUE, "London", "Greater London", "sw3 3kl",
                     LocalDate.of(2014, Month.MARCH, 5),4,
-                    "New residence with the best of facilities");
+                    "New residence with the best of facilities", Status.ACTIVE);
 
             Property p2 = new Property("123 Main St", PropertyType.COMMERCIAL,
                     "Luxury Apartment", 500000.00, true,
                     "New York", "NY", "10001", LocalDate.now(), 5,
-                    "A great property!");
+                    "A great property!", Status.ACTIVE);
 
             propertyRepo.saveAll(List.of(p1,p2));
 

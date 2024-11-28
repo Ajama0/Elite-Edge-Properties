@@ -23,4 +23,6 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(exceptionPayload, HttpStatus.BAD_REQUEST);
     }
+
+
 }

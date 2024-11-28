@@ -2,21 +2,17 @@ package com.example.Elite.Edge.Properties.Controller;
 
 
 import com.example.Elite.Edge.Properties.DTO.PropertyDTO;
-import com.example.Elite.Edge.Properties.DTO.PropertyOnwerDto;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.Property;
 import com.example.Elite.Edge.Properties.Model.PropertyOwner;
 import com.example.Elite.Edge.Properties.Service.propertyService;
 import com.example.Elite.Edge.Properties.Wrapper.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/Properties")
@@ -132,7 +128,7 @@ public class propertyController {
     @DeleteMapping(value = "unlisted-property/{id}")
     public ResponseEntity<ApiResponse<Void>>deleteProperty(@PathVariable Long id){
 
-        propertyservice.DeleteProperty(id);
+        propertyservice.deleteProperty(id);
         return ResponseEntity.ok(new ApiResponse<>("successfully deleted",null));
 
 

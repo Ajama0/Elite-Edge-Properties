@@ -2,6 +2,7 @@ package com.example.Elite.Edge.Properties.Model;
 
 
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
@@ -68,6 +69,10 @@ public class Property {
     @Column(name = "updated_at")
     private LocalDate updated_at;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     //accessing the units associated with properties
     @OneToMany(mappedBy = "property",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -86,7 +91,8 @@ public class Property {
     public Property(String address, PropertyType propertyType, String propertyname, double propertyvalue,
                     Boolean parkingAvailable, String city, String state,
                     String zipcode, LocalDate purchaseDate,
-                    Integer rating, String propertydescription
+                    Integer rating, String propertydescription,
+                    Status status
                     ) {
         this.address = address;
         this.propertyType = propertyType;
@@ -99,6 +105,7 @@ public class Property {
         this.purchaseDate = purchaseDate;
         this.rating = rating;
         this.propertydescription = propertydescription;
+        this.status = status;
         this.accessedTimeStamp = LocalDate.now();
         this.created_at = LocalDate.now();
         this.updated_at = LocalDate.now();
@@ -165,6 +172,14 @@ public class Property {
 
     public String getZipcode() {
         return zipcode;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public LocalDate getPurchaseDate() {

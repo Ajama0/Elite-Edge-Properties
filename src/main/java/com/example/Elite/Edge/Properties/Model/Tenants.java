@@ -49,6 +49,7 @@ public class Tenants {
     private Double income;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status tenantStatus;
 
 

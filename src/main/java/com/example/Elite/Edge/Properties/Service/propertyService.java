@@ -4,7 +4,7 @@ package com.example.Elite.Edge.Properties.Service;
 import com.example.Elite.Edge.Properties.DTO.PropertyDTO;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Enums.Status;
-import com.example.Elite.Edge.Properties.Enums.TenantStatus;
+
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Model.*;
@@ -122,7 +122,8 @@ public class propertyService {
             propertyDTO.getCity(),
             propertyDTO.getPurchaseDate(),
             propertyDTO.getRating(),
-            propertyDTO.getPropertyDescription());
+            propertyDTO.getPropertyDescription(),
+            propertyDTO.getStatus());
 
             Property savedProperty = PropertyRepository.save(property);
 
@@ -166,7 +167,7 @@ public class propertyService {
 
     //assume a property is no longer available (soft delete)
     @Transactional
-    public void DeleteProperty(Long id) {
+    public void deleteProperty(Long id) {
         Optional<Property> deletePropertyId = PropertyRepository.findById(id);
 
         if(deletePropertyId.isEmpty()){
@@ -174,24 +175,23 @@ public class propertyService {
         }
 
         Property property = deletePropertyId.get();
+        property.setStatus(Status.DELETED);
         //properties will be removed from the viewings, but will remain in our db for integrity
         //we want to set all associated units to Archived, meaning not available
 
        List<Units> associatedUnits = property.getUnits();
        associatedUnits.forEach(units -> units.setUnitStatus(unitStatus.ARCHIVED));
 
-       //now set the lease and tenants associated to the unit that's associated to the current property as inactive
-
-        //iterate through each object in the associated units list
 
         associatedUnits.forEach(units -> {
-            if(units.getLease()!= null){
-                units.getLease().forEach(lease-> lease.setStatus(Status.DELETED));// Update lease status for each unit
-            }
-            if(units.getTenant()!=null){
-                units.getTenant().setTenantStatus(Status.DELETED); // Update tenant status for each unit
-            }
-        });
+            Optional.ofNullable(units.getLease())
+                    .ifPresent(leases -> leases.forEach(lease -> lease.setStatus(Status.DELETED)));
 
+            Optional.ofNullable(units.getTenant())
+                    .ifPresent(tenants -> tenants.setTenantStatus(Status.DELETED));
+
+        });
+        //persist the changes to the property obj
+        PropertyRepository.save(property);
     }
 }

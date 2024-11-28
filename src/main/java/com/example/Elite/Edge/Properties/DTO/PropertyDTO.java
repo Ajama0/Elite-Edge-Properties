@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.DTO;
 
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Enums.Status;
 import com.example.Elite.Edge.Properties.Model.Property;
 
 import java.time.LocalDate;
@@ -19,9 +20,11 @@ public class PropertyDTO {
     private Integer rating;
     private String propertyDescription;
 
+    private  Status status;
+
     public PropertyDTO(String address, String propertyName, PropertyType propertyType,  double propertyValue, Boolean parkingAvailable, String city, String state,
                             String zipcode, LocalDate purchaseDate, Integer rating,
-                            String propertyDescription) {
+                            String propertyDescription, Status status) {
         this.address = address;
         this.propertyType = propertyType;
         this.propertyName = propertyName;
@@ -33,6 +36,7 @@ public class PropertyDTO {
         this.purchaseDate = purchaseDate;
         this.rating = rating;
         this.propertyDescription = propertyDescription;
+        this.status = status;
     }
 
     public PropertyDTO(Property property){
@@ -47,6 +51,16 @@ public class PropertyDTO {
         this.purchaseDate = property.getPurchaseDate();
         this.rating = property.getRating();
         this.propertyDescription = property.getPropertydescription();
+        this.status = property.getStatus();
+    }
+
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getAddress() {

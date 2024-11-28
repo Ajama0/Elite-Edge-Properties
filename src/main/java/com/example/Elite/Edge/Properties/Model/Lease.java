@@ -50,6 +50,7 @@ public class Lease {
     private LocalDate updatedDate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne

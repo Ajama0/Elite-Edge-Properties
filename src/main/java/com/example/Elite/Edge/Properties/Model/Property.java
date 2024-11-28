@@ -69,7 +69,7 @@ public class Property {
     private LocalDate updated_at;
 
     //accessing the units associated with properties
-    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "property",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Units> units;
 

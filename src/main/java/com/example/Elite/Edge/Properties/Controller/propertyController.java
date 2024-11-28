@@ -130,7 +130,7 @@ public class propertyController {
 
 
     @DeleteMapping(value = "delete-property/{id}")
-    public ResponseEntity<ApiResponse<?>>deleteProperty(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<Void>>deleteProperty(@PathVariable Long id){
 
         propertyservice.DeleteProperty(id);
         return ResponseEntity.ok(new ApiResponse<>("successfully deleted",null));

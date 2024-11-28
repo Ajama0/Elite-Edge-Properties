@@ -168,6 +168,7 @@ public class propertyService {
 
     }
 
+    //assume a property has been sold
     @Transactional
     public void DeleteProperty(Long id) {
         Optional<Property> deletePropertyId = PropertyRepository.findById(id);
@@ -176,22 +177,23 @@ public class propertyService {
             throw new PropertyException(id + " does not exist");
         }
 
-        Property getObj = deletePropertyId.get();
+        Property property = deletePropertyId.get();
         //deleting the associated units.
         //deleting the associated property owners
         //other owners could be associated to other properties
         //hence we remove the association between owners and the property
 
-        List<PropertyOwner> associatedOwners = getObj.getPropertyOwners();
+        //for each property we get their owner, and remove the association
+        property.getPropertyOwners().forEach(propertyOwner -> propertyOwner.getProperties()
+                .remove(property));
 
-        associatedOwners.forEach(owner -> associatedOwners.remove(getObj));
-        getObj.getPropertyOwners().clear();
+        property.getPropertyOwners().clear();
 
 
-        List<Units> associatedUnits = getObj.getUnits();
 
+        List<Units> associatedUnits = property.getUnits();
         unitrepository.deleteAll(associatedUnits);
-        PropertyRepository.delete(getObj);
+        PropertyRepository.delete(property);
 
 
 

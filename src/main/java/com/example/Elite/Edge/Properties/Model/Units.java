@@ -76,13 +76,16 @@ public class Units {
      * informatoin about a lease
      */
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "property_id")
     private Property property;
 
 
 
-    @OneToOne(mappedBy = "units")
+    @OneToOne(mappedBy = "units",fetch = FetchType.LAZY)
+    @JsonIgnore
     private Tenants tenant;
 
     @OneToMany(mappedBy = "unit", fetch = FetchType.LAZY )

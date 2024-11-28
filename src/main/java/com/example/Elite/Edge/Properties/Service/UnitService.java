@@ -72,7 +72,20 @@ public class UnitService {
         }
 
 
+    public List<Units> retrieveUnitsInRange(Long id, double min, double max) {
+        //check if property exists first
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(()-> new PropertyException("INVALID PROPERTY"));
 
+        List<Units> propertyUnits = property.getUnits().stream()
+                .filter(units -> units.getRentprice()>=min && units.getRentprice()<=max)
+                .collect(Collectors.toList());
 
+        if(propertyUnits.isEmpty()){
+            throw new UnitException("There are no properties within this range");
+        }
 
+        return propertyUnits;
+
+    }
 }

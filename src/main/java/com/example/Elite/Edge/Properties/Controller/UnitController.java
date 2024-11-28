@@ -6,10 +6,7 @@ import com.example.Elite.Edge.Properties.Service.UnitService;
 import com.example.Elite.Edge.Properties.Wrapper.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,11 +50,25 @@ public class UnitController {
                                                                      Long propertyId){
         try{
             List<Units> retrieveProperty = unitService.retrievePropertyUnits(propertyId);
-            return ResponseEntity.ok(new ApiResponse<>("success", retrieveProperty));
+            return new ResponseEntity<>(new ApiResponse<>("success", retrieveProperty),
+                    HttpStatus.OK);
         }catch (RuntimeException runtimeException){
             throw new UnitException("units for property: " + propertyId + " were not found");
         }
     }
 
+    @GetMapping(value = "units/price/range")
+    public ResponseEntity<ApiResponse<Object>> fetchUnitsByPrice(
+            @RequestParam("Property_id")Long id,
+            @RequestParam("minimum_rent_price")double min,
+            @RequestParam("maximum_rent_price")double max){
+        try {
+            List<Units> unitsInRange = unitService.retrieveUnitsInRange(id, min, max);
+            return ResponseEntity.ok(new ApiResponse<>("success", unitsInRange));
+        }catch (RuntimeException runtimeException){
+            throw new UnitException("enter a different range");
+        }
+
+    }
 
 }

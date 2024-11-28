@@ -191,8 +191,8 @@ public class propertyService {
 
 
 
-        List<Units> associatedUnits = property.getUnits();
-        unitrepository.deleteAll(associatedUnits);
+
+
         PropertyRepository.delete(property);
 
 

@@ -2,17 +2,16 @@ package com.example.Elite.Edge.Properties.Service;
 
 
 import com.example.Elite.Edge.Properties.DTO.PropertyDTO;
-import com.example.Elite.Edge.Properties.DTO.PropertyOnwerDto;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Enums.Status;
+import com.example.Elite.Edge.Properties.Enums.TenantStatus;
+import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
-import com.example.Elite.Edge.Properties.Model.Property;
-import com.example.Elite.Edge.Properties.Model.PropertyOwner;
-import com.example.Elite.Edge.Properties.Model.Units;
+import com.example.Elite.Edge.Properties.Model.*;
 import com.example.Elite.Edge.Properties.Repository.propertyRepository;
 import com.example.Elite.Edge.Properties.Repository.unitRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +39,7 @@ public class propertyService {
 
         if(getProperties.isEmpty()){
             throw new IllegalStateException("There are Currently no properties.. sorry!");
-
-
         }
-        new Property().setAccessedTimeStamp(LocalDate.now());
         return getProperties;
     }
 
@@ -168,7 +164,7 @@ public class propertyService {
 
     }
 
-    //assume a property has been sold
+    //assume a property is no longer available (soft delete)
     @Transactional
     public void DeleteProperty(Long id) {
         Optional<Property> deletePropertyId = PropertyRepository.findById(id);
@@ -178,26 +174,24 @@ public class propertyService {
         }
 
         Property property = deletePropertyId.get();
-        //deleting the associated units.
-        //deleting the associated property owners
-        //other owners could be associated to other properties
-        //hence we remove the association between owners and the property
+        //properties will be removed from the viewings, but will remain in our db for integrity
+        //we want to set all associated units to Archived, meaning not available
 
-        //for each property we get their owner, and remove the association
-        property.getPropertyOwners().forEach(propertyOwner -> propertyOwner.getProperties()
-                .remove(property));
+       List<Units> associatedUnits = property.getUnits();
+       associatedUnits.forEach(units -> units.setUnitStatus(unitStatus.ARCHIVED));
 
-        property.getPropertyOwners().clear();
+       //now set the lease and tenants associated to the unit that's associated to the current property as inactive
 
+        //iterate through each object in the associated units list
 
-
-
-
-        PropertyRepository.delete(property);
-
-
-
-
+        associatedUnits.forEach(units -> {
+            if(units.getLease()!= null){
+                units.getLease().forEach(lease-> lease.setStatus(Status.DELETED));// Update lease status for each unit
+            }
+            if(units.getTenant()!=null){
+                units.getTenant().setTenantStatus(Status.DELETED); // Update tenant status for each unit
+            }
+        });
 
     }
 }

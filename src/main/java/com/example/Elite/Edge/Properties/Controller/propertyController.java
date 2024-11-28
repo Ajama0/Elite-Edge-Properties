@@ -129,7 +129,7 @@ public class propertyController {
     }
 
 
-    @DeleteMapping(value = "delete-property/{id}")
+    @DeleteMapping(value = "unlisted-property/{id}")
     public ResponseEntity<ApiResponse<Void>>deleteProperty(@PathVariable Long id){
 
         propertyservice.DeleteProperty(id);

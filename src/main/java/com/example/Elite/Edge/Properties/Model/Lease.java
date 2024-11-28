@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.Model;
 
 
+import com.example.Elite.Edge.Properties.Enums.Status;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -48,6 +49,8 @@ public class Lease {
     @Column(name = "updated_date", nullable = false)
     private LocalDate updatedDate;
 
+    @Column(name = "status")
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "unit_id")
@@ -138,6 +141,14 @@ public class Lease {
         this.terminationNoticePeriod = terminationNoticePeriod;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public void setAgreementDocument(String agreementDocument) {
         this.agreementDocument = agreementDocument;
     }
@@ -160,7 +171,7 @@ public class Lease {
 
 
     public Lease(LocalDate startDate, LocalDate endDate, Double rentAmount, Double depositAmount,
-                 Integer terminationNoticePeriod, String agreementDocument) {
+                 Integer terminationNoticePeriod, String agreementDocument, Status leaseStatus) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.rentAmount = rentAmount;
@@ -169,6 +180,7 @@ public class Lease {
         this.agreementDocument = agreementDocument;
         this.createdDate = LocalDate.now();
         this.updatedDate = LocalDate.now();
+        this.status= leaseStatus;
 
     }
 
@@ -186,6 +198,7 @@ public class Lease {
                 ", updatedDate=" + updatedDate +
                 ", unit=" + unit +
                 ", tenants=" + tenants +
+                ", status =" + status +
                 '}';
     }
 }

@@ -3,9 +3,11 @@ package com.example.Elite.Edge.Properties.Model;
 
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -83,8 +85,9 @@ public class Units {
     @OneToOne(mappedBy = "units")
     private Tenants tenant;
 
-    @OneToMany(mappedBy = "unit")
-    private List<Lease> lease;
+    @OneToMany(mappedBy = "unit", fetch = FetchType.LAZY )
+    @JsonIgnore
+    private List<Lease> lease = new ArrayList<>();
 
 
     public String getUnitNumber() {

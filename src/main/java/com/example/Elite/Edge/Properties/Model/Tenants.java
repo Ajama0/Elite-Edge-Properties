@@ -1,5 +1,6 @@
 package com.example.Elite.Edge.Properties.Model;
 
+import com.example.Elite.Edge.Properties.Enums.Status;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -46,6 +47,10 @@ public class Tenants {
 
     @Column
     private Double income;
+
+    @Column(name = "status")
+    private Status tenantStatus;
+
 
     @OneToOne
     @JoinColumn(name = "unit_id", nullable = false)
@@ -95,6 +100,10 @@ public class Tenants {
         return phone;
     }
 
+    public Status getTenantStatus(){
+        return tenantStatus;
+    }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -110,6 +119,11 @@ public class Tenants {
     public String getAddress() {
         return address;
     }
+
+    public void setTenantStatus(Status tenantStatus) {
+        this.tenantStatus = tenantStatus;
+    }
+
 
     public void setAddress(String address) {
         this.address = address;
@@ -149,7 +163,7 @@ public class Tenants {
 
     // Optional: Custom Constructor
     public Tenants(String firstName, String lastName, String email, String phone, LocalDate dob,
-                   String address, String occupation, Double income) {
+                   String address, String occupation, Double income, Status tenantStatus) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -158,7 +172,9 @@ public class Tenants {
         this.address = address;
         this.occupation = occupation;
         this.income = income;
+        this.tenantStatus = tenantStatus;
     }
+
 
     @Override
     public String toString() {

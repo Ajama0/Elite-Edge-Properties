@@ -1,10 +1,7 @@
 package com.example.Elite.Edge.Properties.Config;
 
 
-import com.example.Elite.Edge.Properties.Enums.PropertyType;
-import com.example.Elite.Edge.Properties.Enums.paymentStatus;
-import com.example.Elite.Edge.Properties.Enums.unitStatus;
-import com.example.Elite.Edge.Properties.Enums.unitType;
+import com.example.Elite.Edge.Properties.Enums.*;
 import com.example.Elite.Edge.Properties.Model.*;
 import com.example.Elite.Edge.Properties.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,11 +93,11 @@ public class Configuration {
             //tenant
             Tenants t1 = new Tenants("david", "lenn", "davidl@example.com", "0748310820",
                     LocalDate.of(1994, Month.AUGUST,4),
-                    "114 avenue rd", "Engineer", 60000.00);
+                    "114 avenue rd", "Engineer", 60000.00, Status.ACTIVE);
 
             Tenants t2 = new Tenants("holly", "jen", "holly@example.com", "+1(534)766 372",
                     LocalDate.of(1997, Month.AUGUST,4),
-                    "3 retherford way", "Teacher", 80000.00);
+                    "3 retherford way", "Teacher", 80000.00, Status.ACTIVE);
 
             t1.setUnit(u1);
             u1.setTenant(t1);
@@ -111,10 +108,12 @@ public class Configuration {
 
             //leases
             Lease l1 = new Lease(LocalDate.of(2024, Month.SEPTEMBER, 19),
-                    LocalDate.of(2026, Month.MAY, 1),2000.00, 1500.00,60,"Agreement.pdf");
+                    LocalDate.of(2026, Month.MAY, 1),2000.00, 1500.00,60,"Agreement.pdf",
+                    Status.ACTIVE);
 
             Lease l2 = new Lease(LocalDate.of(2024, Month.NOVEMBER, 19),
-                    LocalDate.of(2026, Month.AUGUST, 1),2500.00, 2000.00,60,"Agreement.pdf");
+                    LocalDate.of(2026, Month.AUGUST, 1),2500.00, 2000.00,60,"Agreement.pdf",
+                    Status.ACTIVE);
 
 
 

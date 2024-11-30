@@ -27,6 +27,18 @@ public class Units {
         this.deposit = deposit;
 
     }
+    public Units(String unitNumber, String floorNumber,
+                 double rentprice, double unitvalue, unitType unitType, Integer numberofrooms,
+                 double deposit ){
+        this.unitNumber = unitNumber;
+        FloorNumber = floorNumber;
+        this.rentprice = rentprice;
+        this.unitvalue = unitvalue;
+        this.unitType = unitType;
+        this.numberofrooms = numberofrooms;
+        this.deposit = deposit;
+
+    }
 
     @Id
     @SequenceGenerator(name = "units_sequence",

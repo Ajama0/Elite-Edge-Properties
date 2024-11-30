@@ -2,6 +2,7 @@ package com.example.Elite.Edge.Properties.Service;
 
 
 import com.example.Elite.Edge.Properties.DTO.TenantDto;
+import com.example.Elite.Edge.Properties.DTO.UnitDto;
 import com.example.Elite.Edge.Properties.Enums.Status;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
@@ -13,7 +14,9 @@ import com.example.Elite.Edge.Properties.Model.Tenants;
 import com.example.Elite.Edge.Properties.Model.Units;
 import com.example.Elite.Edge.Properties.Repository.PropertyRepository;
 import com.example.Elite.Edge.Properties.Repository.UnitRepository;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import jakarta.transaction.Transactional;
+import org.springframework.boot.web.server.PortInUseException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -131,6 +134,49 @@ public class UnitService {
         Tenants tenants = fetchUnit.getTenant();
 
         return new TenantDto(tenants);
+
+
+    }
+
+    @Transactional
+    public UnitDto createUnit(Long id, UnitDto unitDto) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new PropertyException("Property with id " + id + " does not exist"));
+
+        //we now know the property exists
+        // map the dto to a property, save it and return the dto.
+
+        //ensure the unit doesn't already exist
+        Optional <Units> unitDuplicationCheck = property.getUnits()
+                .stream()
+                .filter(units -> units.getUnitNumber().equals(unitDto.getUnitNumber()))
+                .findFirst();
+
+        if(unitDuplicationCheck.isPresent()){
+            throw new UnitException("unit " + unitDto.getUnitNumber() + " already exists");
+        }
+
+
+        Units saveUnit = new Units(
+                unitDto.getUnitNumber(),
+                unitDto.getFloorNumber(),
+                unitDto.getRentprice(),
+                unitDto.getUnitvalue(),
+                unitDto.getUnitType(),
+                unitDto.getNumberofrooms(),
+                unitDto.getDeposit()
+
+        );
+        saveUnit.setUnitStatus(unitStatus.VACANT);
+        saveUnit.setProperty(property);
+
+        property.getUnits().add(saveUnit);
+
+        unitRepository.save(saveUnit);
+
+        return new UnitDto(saveUnit.getUnitNumber(), saveUnit.getFloorNumber(), saveUnit.getRentprice(),
+                saveUnit.getUnitvalue(), saveUnit.getUnitType(), saveUnit.getNumberofrooms(),
+                saveUnit.getDeposit());
 
 
     }

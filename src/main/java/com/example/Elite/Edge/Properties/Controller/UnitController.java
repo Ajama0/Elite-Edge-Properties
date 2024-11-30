@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.Controller;
 
 import com.example.Elite.Edge.Properties.DTO.TenantDto;
+import com.example.Elite.Edge.Properties.DTO.UnitDto;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
@@ -103,6 +104,14 @@ public class UnitController {
         TenantDto unitTenants = unitService.fetchTenant(propertyId, unitId);
         return new ResponseEntity<>(new ApiResponse<>("success",unitTenants), HttpStatus.OK);
 
+    }
+
+    @PostMapping(path = "property/{id}/create-unit")
+    public ResponseEntity<ApiResponse<Object>> createUnit(
+            @PathVariable Long id,
+            @RequestBody UnitDto unitDto){
+        UnitDto unitDto1 = unitService.createUnit(id, unitDto);
+        return new ResponseEntity<>(new ApiResponse<>("success", unitDto1), HttpStatus.CREATED);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.Model;
 
 import com.example.Elite.Edge.Properties.Enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -53,7 +54,8 @@ public class Tenants {
     private Status tenantStatus;
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "unit_id", nullable = false)
     private Units units;
 

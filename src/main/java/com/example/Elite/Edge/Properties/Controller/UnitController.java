@@ -1,5 +1,6 @@
 package com.example.Elite.Edge.Properties.Controller;
 
+import com.example.Elite.Edge.Properties.DTO.TenantDto;
 import com.example.Elite.Edge.Properties.Enums.PropertyType;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
@@ -94,12 +95,12 @@ public class UnitController {
         }
     }
 
-    @GetMapping(path = "property/{id}/units/{id}/tenants")
+    @GetMapping(path = "property/{property_id}/units/{unit_id}/tenants")
     public ResponseEntity<ApiResponse<?>> fetchUnitTenants(
-            @PathVariable("id")Long propertyId,
-            @PathVariable("id") Long unitId){
+            @PathVariable("property_id")Long propertyId,
+            @PathVariable("unit_id") Long unitId){
 
-        Tenants unitTenants = unitService.fetchTenant(propertyId, unitId);
+        TenantDto unitTenants = unitService.fetchTenant(propertyId, unitId);
         return new ResponseEntity<>(new ApiResponse<>("success",unitTenants), HttpStatus.OK);
 
     }

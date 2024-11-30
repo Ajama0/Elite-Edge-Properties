@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.Service;
 
 
+import com.example.Elite.Edge.Properties.DTO.TenantDto;
 import com.example.Elite.Edge.Properties.Enums.Status;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
 import com.example.Elite.Edge.Properties.Enums.unitType;
@@ -114,7 +115,7 @@ public class UnitService {
         return unitTypes;
     }
 
-    public Tenants fetchTenant(Long propertyId, Long unitId){
+    public TenantDto fetchTenant(Long propertyId, Long unitId){
         Property validateProperty = propertyRepository.findById(propertyId)
                 .orElseThrow(()->  new PropertyException("Property does not exist"));
 
@@ -127,7 +128,10 @@ public class UnitService {
                 .orElseThrow(()-> new UnitException("unit id " + unitId + " does not exist for this property"));
 
         //the optional is unwrapped by OrElseThrow is value is present, we then get the tenant associated with the unit
-        return fetchUnit.getTenant();
+        Tenants tenants = fetchUnit.getTenant();
+
+        return new TenantDto(tenants);
+
 
     }
 }

@@ -16,6 +16,9 @@ import com.example.Elite.Edge.Properties.Repository.PropertyRepository;
 import com.example.Elite.Edge.Properties.Repository.UnitRepository;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.PortInUseException;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +26,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
+@Slf4j
 public class UnitService {
 
     private final UnitRepository unitRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UnitService.class);
     private final PropertyRepository propertyRepository;
 
     public UnitService(UnitRepository unitRepository, PropertyRepository propertyRepository){
@@ -84,6 +91,8 @@ public class UnitService {
         Property property = propertyRepository.findById(id)
                 .orElseThrow(()-> new PropertyException("INVALID PROPERTY"));
 
+
+
         //ensure the property being returned is not archived and is an available property
 
         if(!property.getStatus().equals(Status.ACTIVE)){
@@ -138,46 +147,54 @@ public class UnitService {
 
     }
 
+    // TODO revisit this function and allow unitType setting for the client
+    //unit type returns null when parsed into the request body
     @Transactional
     public UnitDto createUnit(Long id, UnitDto unitDto) {
         Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new PropertyException("Property with id " + id + " does not exist"));
 
+        logger.info("Fetched Property: {}", property);
+
         //we now know the property exists
         // map the dto to a property, save it and return the dto.
 
         //ensure the unit doesn't already exist
-        Optional <Units> unitDuplicationCheck = property.getUnits()
+        Optional<Units> unitDuplicationCheck = property.getUnits()
                 .stream()
                 .filter(units -> units.getUnitNumber().equals(unitDto.getUnitNumber()))
                 .findFirst();
 
-        if(unitDuplicationCheck.isPresent()){
+        if (unitDuplicationCheck.isPresent()) {
             throw new UnitException("unit " + unitDto.getUnitNumber() + " already exists");
         }
 
 
-        Units saveUnit = new Units(
-                unitDto.getUnitNumber(),
+        Units unit = new Units(unitDto.getUnitNumber(),
                 unitDto.getFloorNumber(),
                 unitDto.getRentprice(),
                 unitDto.getUnitvalue(),
-                unitDto.getUnitType(),
                 unitDto.getNumberofrooms(),
                 unitDto.getDeposit()
+                );
 
-        );
-        saveUnit.setUnitStatus(unitStatus.VACANT);
-        saveUnit.setProperty(property);
+        unit.setUnitStatus(unitStatus.VACANT);
+        unit.setUnitType(unitType.APARTMENT);
+        property.getUnits().add(unit);
+        unit.setProperty(property);
 
-        property.getUnits().add(saveUnit);
+        logger.info("Saving Unit: {}", unit);
 
-        unitRepository.save(saveUnit);
+        unitRepository.save(unit);
 
-        return new UnitDto(saveUnit.getUnitNumber(), saveUnit.getFloorNumber(), saveUnit.getRentprice(),
-                saveUnit.getUnitvalue(), saveUnit.getUnitType(), saveUnit.getNumberofrooms(),
-                saveUnit.getDeposit());
+        logger.info("Saved Unit: {}", unit);
+
+        // Map Entity to DTO
+        return new UnitDto(unit);
 
 
     }
+
+
+
 }

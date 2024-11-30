@@ -28,13 +28,12 @@ public class Units {
 
     }
     public Units(String unitNumber, String floorNumber,
-                 double rentprice, double unitvalue, unitType unitType, Integer numberofrooms,
+                 double rentprice, double unitvalue,Integer numberofrooms,
                  double deposit ){
         this.unitNumber = unitNumber;
         FloorNumber = floorNumber;
         this.rentprice = rentprice;
         this.unitvalue = unitvalue;
-        this.unitType = unitType;
         this.numberofrooms = numberofrooms;
         this.deposit = deposit;
 
@@ -91,7 +90,7 @@ public class Units {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "property_id")
+    @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 
 

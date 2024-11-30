@@ -1,6 +1,11 @@
 package com.example.Elite.Edge.Properties.Controller;
 
+import com.example.Elite.Edge.Properties.Enums.PropertyType;
+import com.example.Elite.Edge.Properties.Enums.unitStatus;
+import com.example.Elite.Edge.Properties.Enums.unitType;
 import com.example.Elite.Edge.Properties.Exceptions.UnitException;
+import com.example.Elite.Edge.Properties.Model.PropertyOwner;
+import com.example.Elite.Edge.Properties.Model.Tenants;
 import com.example.Elite.Edge.Properties.Model.Units;
 import com.example.Elite.Edge.Properties.Service.UnitService;
 import com.example.Elite.Edge.Properties.Wrapper.ApiResponse;
@@ -70,5 +75,34 @@ public class UnitController {
         }
 
     }
+
+    //retrieve all units from a property that are Apartment or studio depending on what the user inputs
+    @GetMapping(value = "property/units/e/type")
+    public ResponseEntity<ApiResponse<Object>> fetchUnitType(
+            @RequestParam Long id,
+            @RequestParam("unit_type") unitType Unittype
+            ){
+        try{
+            List<Units> units = unitService.retrieveByType(id, Unittype);
+            if(units.isEmpty()){
+                throw new UnitException("No available units of the selected type at the moment.");
+            }
+            return new ResponseEntity<>(new ApiResponse<>("success", units), HttpStatus.OK);
+
+        }catch (RuntimeException runtimeException){
+            throw new UnitException("Ensure a valid and correct type was selected");
+        }
+    }
+
+    @GetMapping(path = "property/{id}/units/{id}/tenants")
+    public ResponseEntity<ApiResponse<?>> fetchUnitTenants(
+            @PathVariable("id")Long propertyId,
+            @PathVariable("id") Long unitId){
+
+        Tenants unitTenants = unitService.fetchTenant(propertyId, unitId);
+        return new ResponseEntity<>(new ApiResponse<>("success",unitTenants), HttpStatus.OK);
+
+    }
+
 
 }

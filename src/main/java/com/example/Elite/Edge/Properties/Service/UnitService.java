@@ -3,9 +3,12 @@ package com.example.Elite.Edge.Properties.Service;
 
 import com.example.Elite.Edge.Properties.Enums.Status;
 import com.example.Elite.Edge.Properties.Enums.unitStatus;
+import com.example.Elite.Edge.Properties.Enums.unitType;
 import com.example.Elite.Edge.Properties.Exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.Exceptions.UnitException;
+import com.example.Elite.Edge.Properties.Exceptions.tenantNotFoundException;
 import com.example.Elite.Edge.Properties.Model.Property;
+import com.example.Elite.Edge.Properties.Model.Tenants;
 import com.example.Elite.Edge.Properties.Model.Units;
 import com.example.Elite.Edge.Properties.Repository.PropertyRepository;
 import com.example.Elite.Edge.Properties.Repository.UnitRepository;
@@ -77,6 +80,12 @@ public class UnitService {
         Property property = propertyRepository.findById(id)
                 .orElseThrow(()-> new PropertyException("INVALID PROPERTY"));
 
+        //ensure the property being returned is not archived and is an available property
+
+        if(!property.getStatus().equals(Status.ACTIVE)){
+            throw new PropertyException("Archived properties are not for viewings.");
+        }
+
         List<Units> propertyUnits = property.getUnits().stream()
                 .filter(units -> units.getRentprice()>=min && units.getRentprice()<=max)
                 .collect(Collectors.toList());
@@ -86,6 +95,39 @@ public class UnitService {
         }
 
         return propertyUnits;
+
+    }
+
+    public List<Units> retrieveByType(Long id, unitType type){
+        //check if the property exist first
+        Property validateProperty = propertyRepository.findById(id)
+                .orElseThrow(()->  new PropertyException("Property does not exist"));
+
+        //fetch the units matching to the status type of the apartment
+
+        List<Units> unitTypes = validateProperty.getUnits()
+                .stream()
+                .filter(units -> units.getUnitType().equals(type))
+                .collect(Collectors.toList());
+
+
+        return unitTypes;
+    }
+
+    public Tenants fetchTenant(Long propertyId, Long unitId){
+        Property validateProperty = propertyRepository.findById(propertyId)
+                .orElseThrow(()->  new PropertyException("Property does not exist"));
+
+        //now for that property get the specific unit with id = 1;
+
+        Units fetchUnit = validateProperty.getUnits()
+                .stream()
+                .filter(units -> units.getId().equals(unitId))
+                .findFirst()
+                .orElseThrow(()-> new UnitException("unit id " + unitId + " does not exist for this property"));
+
+        //the optional is unwrapped by OrElseThrow is value is present, we then get the tenant associated with the unit
+        return fetchUnit.getTenant();
 
     }
 }

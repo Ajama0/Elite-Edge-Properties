@@ -1,13 +1,14 @@
 package com.example.Elite.Edge.Properties.service;
 
 
-import com.example.Elite.Edge.Properties.dto.TenantDto;
+import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.dto.UnitDto;
 import com.example.Elite.Edge.Properties.constants.Status;
 import com.example.Elite.Edge.Properties.constants.unitStatus;
 import com.example.Elite.Edge.Properties.constants.unitType;
 import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
+import com.example.Elite.Edge.Properties.mapper.TenantMapper;
 import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.model.Tenants;
 import com.example.Elite.Edge.Properties.model.Units;
@@ -124,7 +125,7 @@ public class UnitService {
         return unitTypes;
     }
 
-    public TenantDto fetchTenant(Long propertyId, Long unitId){
+    public ResponseTenantDto fetchTenant(Long propertyId, Long unitId){
         Property validateProperty = propertyRepository.findById(propertyId)
                 .orElseThrow(()->  new PropertyException("Property does not exist"));
 
@@ -139,7 +140,7 @@ public class UnitService {
         //the optional is unwrapped by OrElseThrow is value is present, we then get the tenant associated with the unit
         Tenants tenants = fetchUnit.getTenant();
 
-        return new TenantDto(tenants);
+        return TenantMapper.mapTenantsForResponse(tenants);
 
 
     }
@@ -198,11 +199,22 @@ public class UnitService {
         //if this returns a property then a property does exist
         Property property = propertyExists(id);
 
-        List<Units> associatedUnits = property.getUnits();
-        //use the repo to check for units with the clients requested number of rooms.
 
+        List<Units> propertyUnits = property.getUnits()
+                .stream()
+                .filter(units -> units.getNumberofrooms().equals(noOfRooms))
+                .collect(Collectors.toList());
+
+        if(propertyUnits.isEmpty()){
+            throw new UnitException("There are no units with " + noOfRooms + " rooms");
+        }
+
+        return propertyUnits;
+
+    }
+
+
+    public Units updateRentPrice(Long propertyId, Long unitId, Double price) {
         return null;
-
-
     }
 }

@@ -3,11 +3,10 @@ package com.example.Elite.Edge.Properties.dto;
 
 
 import com.example.Elite.Edge.Properties.constants.Status;
-import com.example.Elite.Edge.Properties.model.Tenants;
 
 import java.time.LocalDate;
 
-public class TenantDto {
+public class ResponseTenantDto {
 
     private String firstName;
 
@@ -23,20 +22,17 @@ public class TenantDto {
 
     private String occupation;
 
-    private Double income;
+
 
     private Status tenantStatus;
 
-    public TenantDto(Tenants tenants) {
-        this.firstName = tenants.getFirstName();
-        this.lastName = tenants.getLastName();
-        this.email = tenants.getEmail();
-        this.phone = tenants.getPhone();
-        this.dob = tenants.getDob();
-        this.address = tenants.getAddress();
-        this.occupation = tenants.getOccupation();
-        this.income = tenants.getIncome();
-        this.tenantStatus = tenants.getTenantStatus();
+    public ResponseTenantDto(String firstName, String lastName, String email, String phone,
+                             Status tenantStatus) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.tenantStatus = tenantStatus;
     }
 
     public String getFirstName() {
@@ -67,9 +63,7 @@ public class TenantDto {
         return occupation;
     }
 
-    public Double getIncome() {
-        return income;
-    }
+
 
     public Status getTenantStatus() {
         return tenantStatus;

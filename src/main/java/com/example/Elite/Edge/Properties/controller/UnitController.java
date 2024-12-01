@@ -1,6 +1,6 @@
 package com.example.Elite.Edge.Properties.controller;
 
-import com.example.Elite.Edge.Properties.dto.TenantDto;
+import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.dto.UnitDto;
 import com.example.Elite.Edge.Properties.constants.unitType;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
@@ -96,10 +96,22 @@ public class UnitController {
             @PathVariable("property_id")Long propertyId,
             @PathVariable("unit_id") Long unitId){
 
-        TenantDto unitTenants = unitService.fetchTenant(propertyId, unitId);
+        ResponseTenantDto unitTenants = unitService.fetchTenant(propertyId, unitId);
         return new ResponseEntity<>(new ApiResponse<>("success",unitTenants), HttpStatus.OK);
 
     }
+
+    //search for specific criteria when querying for a unit
+    @GetMapping(value = "number-of/rooms")
+    public ResponseEntity<ApiResponse<Object>> fetchUnitsByRooms(
+            @RequestParam("property_id")Long id,
+            @RequestParam("number_of_rooms")Integer noOfRooms
+            ){
+        List<Units> retrieveUnits = unitService.fetchByNoOfRooms(id,noOfRooms);
+        return new ResponseEntity<>(new ApiResponse<>("success", retrieveUnits), HttpStatus.OK);
+
+    }
+
 
     @PostMapping(path = "property/{id}/create-unit")
     public ResponseEntity<ApiResponse<Object>> createUnit(
@@ -109,15 +121,16 @@ public class UnitController {
         return new ResponseEntity<>(new ApiResponse<>("success", unitId), HttpStatus.CREATED);
     }
 
-    //search for specific criteria when querying for a unit
-    @PutMapping(value = "number-of/rooms/")
-    public ResponseEntity<ApiResponse<Object>> fetchUnitsByRooms(
-            @RequestParam("property_id")Long id,
-            @RequestParam("number_of_rooms")Integer noOfRooms
-            ){
-        List<Units> retrieveUnits = unitService.fetchByNoOfRooms(id,noOfRooms);
-        return new ResponseEntity<>(new ApiResponse<>("success", retrieveUnits), HttpStatus.OK);
 
+    @PutMapping(value = "change-rentprice/{id}/{id2}/{price}")
+    public ResponseEntity<ApiResponse<?>>changeRentPrice(
+            @PathVariable("id")Long propertyId,
+            @PathVariable("id2") Long unitId,
+            @PathVariable Double price
+            ){
+
+        Units updatedRent = unitService.updateRentPrice(propertyId, unitId, price);
+        return ResponseEntity.ok(new ApiResponse<>("success", updatedRent));
     }
 
 

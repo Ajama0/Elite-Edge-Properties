@@ -5,6 +5,7 @@ import com.example.Elite.Edge.Properties.dto.RequestTenantDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.model.Tenants;
 import com.example.Elite.Edge.Properties.model.Units;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TenantMapper {
 
@@ -20,13 +21,15 @@ public class TenantMapper {
 
     //allows us to call directly from class name
     public static ResponseTenantDto mapTenantsForResponse(Tenants tenants){
-        return new ResponseTenantDto(
-                tenants.getFirstName(),
-                tenants.getLastName(),
-                tenants.getEmail(),
-                tenants.getPhone(),
-                tenants.getTenantStatus()
-        );
+    return new ResponseTenantDto(
+            tenants.getFirstName(),
+            tenants.getLastName(),
+            tenants.getEmail(),
+            tenants.getPhone(),
+            tenants.getTenantStatus()
+    );
+
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.Elite.Edge.Properties.controller;
 
+import com.example.Elite.Edge.Properties.constants.unitStatus;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.dto.UnitDto;
 import com.example.Elite.Edge.Properties.constants.unitType;
@@ -91,7 +92,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping(path = "property/{property_id}/units/{unit_id}/tenants")
+    @GetMapping(path = "tenants/{property_id}/{unit_id}")
     public ResponseEntity<ApiResponse<?>> fetchUnitTenants(
             @PathVariable("property_id")Long propertyId,
             @PathVariable("unit_id") Long unitId){
@@ -122,8 +123,8 @@ public class UnitController {
     }
 
 
-    @PutMapping(value = "change-rentprice/{id}/{id2}/{price}")
-    public ResponseEntity<ApiResponse<?>>changeRentPrice(
+    @PutMapping(value = "update/rent/{id}/{id2}/{price}")
+    public ResponseEntity<ApiResponse<?>>updateRentPrice(
             @PathVariable("id")Long propertyId,
             @PathVariable("id2") Long unitId,
             @PathVariable Double price
@@ -132,6 +133,23 @@ public class UnitController {
         Units updatedRent = unitService.updateRentPrice(propertyId, unitId, price);
         return ResponseEntity.ok(new ApiResponse<>("success", updatedRent));
     }
+
+    //updating the status of a unit (VACANT, OCCUPIED etc)
+    @PutMapping(path = "update/status" )
+    public ResponseEntity<ApiResponse<Units>> updateUnitStatus(
+            @RequestParam("id") Long propertyId,
+            @RequestParam("id2") Long unitId,
+            @RequestParam ("status") unitStatus status
+    ){
+
+        Units updatedUnit = unitService.updateStatus(propertyId, unitId, status);
+        return new ResponseEntity<>(new ApiResponse<>("success", updatedUnit),
+                HttpStatus.OK);
+    }
+
+
+
+
 
 
 }

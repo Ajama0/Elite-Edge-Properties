@@ -12,4 +12,6 @@ import java.util.List;
 public interface UnitRepository extends JpaRepository<Units,Long> {
 
 
+    @Query("SELECT u FROM Units u WHERE u.property.Id=?1 AND u.id=?2")
+    Units findByPropertyIdAndUnit(Long propertyId, Long unitId);
 }

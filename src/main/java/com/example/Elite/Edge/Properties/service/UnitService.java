@@ -8,6 +8,7 @@ import com.example.Elite.Edge.Properties.constants.unitStatus;
 import com.example.Elite.Edge.Properties.constants.unitType;
 import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
+import com.example.Elite.Edge.Properties.exceptions.tenantNotFoundException;
 import com.example.Elite.Edge.Properties.mapper.TenantMapper;
 import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.model.Tenants;
@@ -125,6 +126,7 @@ public class UnitService {
         return unitTypes;
     }
 
+    @Transactional
     public ResponseTenantDto fetchTenant(Long propertyId, Long unitId){
         Property validateProperty = propertyRepository.findById(propertyId)
                 .orElseThrow(()->  new PropertyException("Property does not exist"));
@@ -139,6 +141,9 @@ public class UnitService {
 
         //the optional is unwrapped by OrElseThrow is value is present, we then get the tenant associated with the unit
         Tenants tenants = fetchUnit.getTenant();
+        if(tenants == null){
+            throw new tenantNotFoundException("tenant does not exist");
+        }
 
         return TenantMapper.mapTenantsForResponse(tenants);
 
@@ -215,6 +220,55 @@ public class UnitService {
 
 
     public Units updateRentPrice(Long propertyId, Long unitId, Double price) {
-        return null;
+        //call the property function, to ensure property exists
+        Property property = propertyExists(propertyId);
+
+        //get the specific unit for the property
+        Units unit = property.getUnits()
+                .stream()
+                .filter(units1 -> units1.getId().equals(unitId))
+                .findFirst()
+                .orElseThrow(() -> new UnitException(unitId + "does not exist"));
+
+        //let's ensure the price being entered by the client is not the same price already saved
+        if(price.equals(unit.getRentprice())){
+            throw new UnitException("Please enter a different rent price");
+
+        }
+        unit.setRentprice(price);
+        unitRepository.save(unit);
+
+        return unit;
+
     }
+
+
+    @Transactional
+    public Units updateStatus(Long propertyId, Long unitId, unitStatus status) {
+        propertyExists(propertyId);
+
+        //fetch unit for the property
+        Units unit = unitRepository.findByPropertyIdAndUnit(propertyId,unitId);
+
+        //remove redundancy
+        if(unit.getUnitStatus().equals(status)){
+            throw new UnitException(status + "is already set for the unit");
+        }
+
+        if(status.equals(unitStatus.VACANT)){
+            //we'd like to disassociate the tenants automatically associated to that unit
+            unit.getTenant().setTenantStatus(Status.DELETED);
+            unit.setTenant(null);
+
+        }
+
+        unit.setUnitStatus(status);
+        unitRepository.save(unit);
+
+        return unit;
+
+    }
+
+
+
 }

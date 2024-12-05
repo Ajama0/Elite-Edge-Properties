@@ -125,7 +125,7 @@ public class UnitController {
     public ResponseEntity<ApiResponse<List<LeaseDto>>> fetchLeases(
             @RequestParam("property_id") Long propertyId,
             @RequestParam("unit_id")  Long unitId,
-            @RequestParam("status")          @Nullable Status status
+            @RequestParam("status")   @Nullable Status status
     ){
         List<LeaseDto> leaseDto = unitService.getAllLeases(propertyId,unitId,status);
         return new ResponseEntity<>(new ApiResponse<>("success", leaseDto),
@@ -179,7 +179,7 @@ public class UnitController {
 
 
     //property deletion ->soft deletes(All unit archived, tenant deleted,and lease deleted )
-    // Hence we dont need a delete operation for the units
+    // Hence we don't need a delete operation for the units
 
 
 

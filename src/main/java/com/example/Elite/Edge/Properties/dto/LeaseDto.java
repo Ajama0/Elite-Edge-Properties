@@ -22,7 +22,7 @@ public class LeaseDto {
     private String AgreementPdf;
 
 
-    private LeaseDto(Lease lease){
+    public LeaseDto(Lease lease){
         this.id = lease.getId();
         this.status = lease.getStatus();
         this.AgreementPdf = lease.getAgreementDocument();

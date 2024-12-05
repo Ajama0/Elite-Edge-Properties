@@ -199,7 +199,7 @@ public class UnitService {
 
     //helper function to continuously check that property is exists
 
-    private  Property propertyExists(Long id){
+    public Property propertyExists(Long id){
         return propertyRepository.findById(id).orElseThrow(()-> new PropertyException("Property does not exist"));
     }
     public List<Units> fetchByNoOfRooms(Long id, Integer noOfRooms) {
@@ -300,14 +300,14 @@ public class UnitService {
             //return all the leases for the unit, assuming admin wants history of leases
             return unit.getLease()
                     .stream()
-                    .map(lease -> new LeaseDto())
+                    .map(LeaseDto::new)
                     .collect(Collectors.toList());
 
         } else {
             return unit.getLease()
                     .stream()
                     .filter(lease -> lease.getStatus().equals(status))
-                    .map(lease -> new LeaseDto())
+                    .map(LeaseDto::new)
                     .collect(Collectors.toList());
 
 

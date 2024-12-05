@@ -15,18 +15,18 @@ import java.util.List;
 @org.springframework.context.annotation.Configuration
 public class Configuration {
 
-    private final leaseRepository leaseRepo;
-    private final paymentsRepository paymentsRepo;
-    private final propertyOwnerRepository propertyOwnerRepo;
+    private final LeaseRepository leaseRepo;
+    private final PaymentRepository paymentsRepo;
+    private final PropertyOwnerRepository propertyOwnerRepo;
     private final PropertyRepository propertyRepo;
-    private final tenantsRepository tenantsRepo;
+    private final TenantRepository tenantsRepo;
     private final UnitRepository unitRepo;
 
     @Autowired
-    public Configuration(leaseRepository leaseRepo, paymentsRepository paymentsRepo,
-                         propertyOwnerRepository propertyOwnerRepo,
+    public Configuration(LeaseRepository leaseRepo, PaymentRepository paymentsRepo,
+                         PropertyOwnerRepository propertyOwnerRepo,
                          PropertyRepository propertyRepo,
-                         tenantsRepository tenantsRepo,
+                         TenantRepository tenantsRepo,
                          UnitRepository unitRepo
 
                          ){
@@ -39,10 +39,10 @@ public class Configuration {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(leaseRepository leaseRepo, paymentsRepository paymentsRepo,
-                                        propertyOwnerRepository propertyOwnerRepo,
+    CommandLineRunner commandLineRunner(LeaseRepository leaseRepo, PaymentRepository paymentsRepo,
+                                        PropertyOwnerRepository propertyOwnerRepo,
                                         PropertyRepository propertyRepo,
-                                        tenantsRepository tenantsRepo, UnitRepository unitRepo){
+                                        TenantRepository tenantsRepo, UnitRepository unitRepo){
 
         return args -> {
 
@@ -114,6 +114,10 @@ public class Configuration {
             Lease l2 = new Lease(LocalDate.of(2024, Month.NOVEMBER, 19),
                     LocalDate.of(2026, Month.AUGUST, 1),2500.00, 2000.00,60,"Agreement.pdf",
                     Status.ACTIVE);
+
+            //extra 10 leases for unit 1 -> property 1
+
+
 
 
 

@@ -1,9 +1,9 @@
 package com.example.Elite.Edge.Properties.repository;
 
-import com.example.Elite.Edge.Properties.model.Tenants;
+import com.example.Elite.Edge.Properties.model.Payments;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface tenantsRepository extends JpaRepository<Tenants,Long> {
+public interface PaymentRepository extends JpaRepository<Payments,Long> {
 }

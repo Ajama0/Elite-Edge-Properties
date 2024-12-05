@@ -40,7 +40,7 @@ public class LeaseService {
                 .stream()
                 .filter(units -> units.getId().equals(unitId))
                 .findFirst()
-                .orElseThrow(() ->new UnitException(unitId + "was not found"));
+                .orElseThrow(() ->new UnitException("unit" + unitId + " was not found"));
 
 
         /**

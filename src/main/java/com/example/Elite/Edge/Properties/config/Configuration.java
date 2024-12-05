@@ -99,6 +99,7 @@ public class Configuration {
                     LocalDate.of(1997, Month.AUGUST,4),
                     "3 retherford way", "Teacher", 80000.00, Status.ACTIVE);
 
+
             t1.setUnit(u1);
             u1.setTenant(t1);
             t2.setUnit(u2);

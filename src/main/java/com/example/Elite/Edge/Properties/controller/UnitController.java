@@ -1,6 +1,8 @@
 package com.example.Elite.Edge.Properties.controller;
 
+import com.example.Elite.Edge.Properties.constants.Status;
 import com.example.Elite.Edge.Properties.constants.unitStatus;
+import com.example.Elite.Edge.Properties.dto.LeaseDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.dto.UnitDto;
 import com.example.Elite.Edge.Properties.constants.unitType;
@@ -8,6 +10,8 @@ import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.model.Units;
 import com.example.Elite.Edge.Properties.service.UnitService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
+import jakarta.annotation.Nullable;
+import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -114,6 +118,21 @@ public class UnitController {
     }
 
 
+    //allow admins to fetch leases based on the status
+    // , i.e all active leases or all leases in general
+    //if no status type is selected we provide all leases for the unit
+    @GetMapping(path = "/leases")
+    public ResponseEntity<ApiResponse<List<LeaseDto>>> fetchLeases(
+            @RequestParam("property_id") Long propertyId,
+            @RequestParam("unit_id")  Long unitId,
+            @RequestParam("status")          @Nullable Status status
+    ){
+        List<LeaseDto> leaseDto = unitService.getAllLeases(propertyId,unitId,status);
+        return new ResponseEntity<>(new ApiResponse<>("success", leaseDto),
+                HttpStatus.OK);
+    }
+
+
     @PostMapping(path = "property/{id}/create-unit")
     public ResponseEntity<ApiResponse<Object>> createUnit(
             @PathVariable Long id,
@@ -146,6 +165,25 @@ public class UnitController {
         return new ResponseEntity<>(new ApiResponse<>("success", updatedUnit),
                 HttpStatus.OK);
     }
+
+    @PutMapping(path = "valuation/update/{property_id}/{unit_id}/{value}")
+    public ResponseEntity<ApiResponse<Object>> updateUnitValue(
+            @PathVariable("property_id") Long propertyId,
+            @PathVariable("unit_id") Long unitId,
+            @PathVariable double value)
+    {
+        Units unitValue = unitService.updateValue(propertyId, unitId, value);
+        return ResponseEntity.ok(new ApiResponse<>("success", unitValue));
+    }
+
+
+
+    //property deletion ->soft deletes(All unit archived, tenant deleted,and lease deleted )
+    // Hence we dont need a delete operation for the units
+
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.example.Elite.Edge.Properties.service;
 
 
+import com.example.Elite.Edge.Properties.dto.LeaseDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.dto.UnitDto;
 import com.example.Elite.Edge.Properties.constants.Status;
@@ -10,6 +11,7 @@ import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.exceptions.tenantNotFoundException;
 import com.example.Elite.Edge.Properties.mapper.TenantMapper;
+import com.example.Elite.Edge.Properties.model.Lease;
 import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.model.Tenants;
 import com.example.Elite.Edge.Properties.model.Units;
@@ -269,6 +271,48 @@ public class UnitService {
 
     }
 
+    public Units updateValue(Long propertyId, Long unitId, double value) {
+        propertyExists(propertyId);
+
+        Units unit = unitRepository.findByPropertyIdAndUnit(propertyId, unitId);
+
+        if(unit==null){
+            throw new UnitException("the unit" + unitId + " does not exist for this property");
+        }
+
+        //check if the value is the same and within a range
+
+        if(unit.getUnitvalue() == value && value>500000.00){
+            unit.setUnitvalue(value);
+        }
+        unitRepository.save(unit);
+        return unit;
+
+    }
 
 
+    public List<LeaseDto> getAllLeases(Long propertyId, Long unitId, Status status) {
+       propertyExists(propertyId);
+
+        Units unit = unitRepository.findByPropertyIdAndUnit(propertyId, unitId);
+
+        if(status == null){
+            //return all the leases for the unit, assuming admin wants history of leases
+            return unit.getLease()
+                    .stream()
+                    .map(lease -> new LeaseDto())
+                    .collect(Collectors.toList());
+
+        } else {
+            return unit.getLease()
+                    .stream()
+                    .filter(lease -> lease.getStatus().equals(status))
+                    .map(lease -> new LeaseDto())
+                    .collect(Collectors.toList());
+
+
+        }
+
+
+    }
 }

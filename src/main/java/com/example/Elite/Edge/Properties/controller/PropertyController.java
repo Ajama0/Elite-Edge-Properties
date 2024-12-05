@@ -125,6 +125,7 @@ public class PropertyController {
     }
 
 
+    //assuming property has been removed from listing or property land has been sold
     @DeleteMapping(value = "unlisted-property/{id}")
     public ResponseEntity<ApiResponse<Void>>deleteProperty(@PathVariable Long id){
 
@@ -136,15 +137,6 @@ public class PropertyController {
 
 
     }
-
-
-
-
-
-
-
-
-
 
 
 

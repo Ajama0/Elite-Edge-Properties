@@ -9,9 +9,8 @@ import com.example.Elite.Edge.Properties.constants.unitStatus;
 import com.example.Elite.Edge.Properties.constants.unitType;
 import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
-import com.example.Elite.Edge.Properties.exceptions.tenantNotFoundException;
+import com.example.Elite.Edge.Properties.exceptions.TenantNotFoundException;
 import com.example.Elite.Edge.Properties.mapper.TenantMapper;
-import com.example.Elite.Edge.Properties.model.Lease;
 import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.model.Tenants;
 import com.example.Elite.Edge.Properties.model.Units;
@@ -144,7 +143,7 @@ public class UnitService {
         //the optional is unwrapped by OrElseThrow is value is present, we then get the tenant associated with the unit
         Tenants tenants = fetchUnit.getTenant();
         if(tenants == null){
-            throw new tenantNotFoundException("tenant does not exist");
+            throw new TenantNotFoundException("tenant does not exist");
         }
 
         return TenantMapper.mapTenantsForResponse(tenants);

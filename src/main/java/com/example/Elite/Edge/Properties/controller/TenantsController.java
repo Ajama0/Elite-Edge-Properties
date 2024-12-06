@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TenantsController {
 
 
-    //Add pagination when getting all tenants for a property
+
 
 
 }

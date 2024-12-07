@@ -150,4 +150,64 @@ public class TenantsService {
         return tenant1.getId();
 
     }
+
+    @Transactional
+    public ResponseTenantDto updateEmail(String email, RequestTenantDto requestTenantDto) {
+        /**
+         * retrieve the tenant email from the request body,
+         * validate in the DB that the tenant already exists
+         * ensure tenant is a valid tenant otherwise reject the request as account was closed
+         * retrieve tenant obj, and persist it into db with updated email
+         *
+         */
+
+        Optional<Tenants> retrieveTenant = tenantRepository.findByEmail(requestTenantDto.getEmail());
+
+        if(retrieveTenant.isEmpty()){
+            throw new TenantNotFoundException("There is no account matching your request");
+        }
+
+        //ensure the tenant is an active tenant within our database
+
+        Tenants fetchTenant = retrieveTenant.get();
+
+        if(fetchTenant.getTenantStatus().equals(Status.DELETED)){
+            throw new TenantNotFoundException("This tenants credentials cannot be updated... please sign up again");
+        }
+        //ensure email is not duplicative
+        if(fetchTenant.getEmail().equals(email)){
+            throw new IllegalArgumentException("Please enter a different email address.");
+        }
+
+        //if all passes we can save the tenant
+        fetchTenant.setEmail(email);
+
+        tenantRepository.save(fetchTenant);
+
+        return TenantMapper.mapTenantsForResponse(fetchTenant);
+
+    }
+
+    public ResponseTenantDto updateIncome(RequestTenantDto requestTenantDto, double income) {
+        Optional<Tenants> validateTenant = tenantRepository.findByEmail(requestTenantDto.getEmail());
+
+        if(validateTenant.isEmpty()){
+            throw new TenantNotFoundException("There is no user matching your credentials. Please sign up");
+        }
+
+        Tenants tenant = validateTenant.get();
+        if(tenant.getTenantStatus().equals(Status.DELETED)){
+            throw new TenantNotFoundException("your account has been closed. please create a new account");
+        }
+
+        if(income<=20000.00){
+            throw new IllegalArgumentException("The selected income is to low");
+        }
+
+        tenant.setIncome(income);
+        tenantRepository.save(tenant);
+        ResponseTenantDto responseTenantDto = new ResponseTenantDto(tenant);
+        return responseTenantDto;
+
+    }
 }

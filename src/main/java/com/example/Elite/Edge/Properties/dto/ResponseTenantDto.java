@@ -28,6 +28,8 @@ public class ResponseTenantDto {
 
     private String Occupation;
 
+    private Double income;
+
 
 
 
@@ -49,6 +51,15 @@ public class ResponseTenantDto {
         this.Id = id;
         this.firstName = firstName;
         this.Occupation = Occupation;
+    }
+
+    public ResponseTenantDto(Tenants tenants){
+        this.Id = tenants.getId();
+        this.income = tenants.getIncome();
+    }
+
+    public double getIncome(){
+        return income;
     }
 
     public Long getId() {

@@ -8,12 +8,15 @@ import com.example.Elite.Edge.Properties.model.Tenants;
 import com.example.Elite.Edge.Properties.model.Units;
 import com.example.Elite.Edge.Properties.service.TenantsService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
+import org.apache.coyote.Response;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/tenants")
@@ -89,6 +92,49 @@ public class TenantsController {
         return new ResponseEntity<>(new ApiResponse<>("success", tenantId),
                 HttpStatus.CREATED);
     }
+
+
+    /**
+     * updateEmail: allow the tenant user to update their email
+     * @param requestTenantDto: custom dto to hide internals
+     *  @param email : new email to set
+     * include ResponseTenantDTO to return obj only showing fields wanted to be returned
+     * @return custom api wrapper: return api wrapper with 200 response
+     */
+
+    @PutMapping("update/email/{email}")
+    public ResponseEntity<ApiResponse<ResponseTenantDto>> updateTenantEmail(
+            @PathVariable("email") String email,
+            @RequestBody RequestTenantDto requestTenantDto
+
+    ) {
+
+        ResponseTenantDto updatedTenant = tenantsService.updateEmail(email, requestTenantDto);
+        return new ResponseEntity<>(new ApiResponse<>("success", updatedTenant),
+                HttpStatus.OK);
+
+
+    }
+
+
+    /**
+     * updateTenantIncome: allow the tenant user to update their email
+     * @param requestTenantDto: custom dto to hide internals
+     *  @param income : new income to set
+     * include ResponseTenantDTO to return obj only showing fields id and income
+     * @return custom api wrapper: return api wrapper with 200 response
+     */
+
+    @PutMapping("update/income")
+    public ResponseEntity<ApiResponse<?>> updateTenantIncome(
+            @RequestBody RequestTenantDto requestTenantDto,
+            @RequestParam ("income") double income
+    ){
+        ResponseTenantDto dto = tenantsService.updateIncome(requestTenantDto, income);
+        return new ResponseEntity<>(new ApiResponse<>("success",dto),
+             HttpStatus.OK);
+    }
+
 
 
 

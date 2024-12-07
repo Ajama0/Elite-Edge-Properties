@@ -3,6 +3,7 @@ package com.example.Elite.Edge.Properties.dto;
 import com.example.Elite.Edge.Properties.constants.Status;
 import com.example.Elite.Edge.Properties.constants.unitStatus;
 import com.example.Elite.Edge.Properties.constants.unitType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestTenantDto {
 
 
@@ -47,7 +49,11 @@ public class RequestTenantDto {
     private Double income;
 
 
-
+    public RequestTenantDto(String firstName, String lastName, String email ){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
 
 

@@ -2,17 +2,16 @@ package com.example.Elite.Edge.Properties.controller;
 
 
 import com.example.Elite.Edge.Properties.constants.Status;
+import com.example.Elite.Edge.Properties.dto.RequestTenantDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.model.Tenants;
+import com.example.Elite.Edge.Properties.model.Units;
 import com.example.Elite.Edge.Properties.service.TenantsService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -70,7 +69,29 @@ public class TenantsController {
 
 
 
-    //get tenant status
+    @GetMapping(path = "{id}/unit")
+    public ResponseEntity<ApiResponse<Units>> findTenantApartment(
+            @PathVariable("id") Long tenantId
+    ){
+        Units unit = tenantsService.findTenantApt(tenantId);
+        return ResponseEntity.ok(new ApiResponse<>("success", unit));
+    }
+
+
+
+    //Best practice is to typically return the id of a POST request
+    @PostMapping(path = "create")
+    public ResponseEntity<ApiResponse<Long>> createTenant(
+            @RequestBody RequestTenantDto requestTenantDto,
+            @RequestParam("unit") Long unitId
+    ){
+        Long tenantId = tenantsService.createTenant(requestTenantDto, unitId);
+        return new ResponseEntity<>(new ApiResponse<>("success", tenantId),
+                HttpStatus.CREATED);
+    }
+
+
+
 
 
 

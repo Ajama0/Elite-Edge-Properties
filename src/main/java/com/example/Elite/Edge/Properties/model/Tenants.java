@@ -159,9 +159,7 @@ public class Tenants {
         this.units = units;
     }
 
-    public Units getUnits() {
-        return units;
-    }
+
 
     // Optional: Custom Constructor
     public Tenants(String firstName, String lastName, String email, String phone, LocalDate dob,

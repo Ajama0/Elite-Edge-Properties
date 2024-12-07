@@ -46,7 +46,7 @@ public class RequestTenantDto {
 
     private Double income;
 
-    private Status tenantStatus;
+
 
 
 

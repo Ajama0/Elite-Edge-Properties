@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 public class LeaseService {
 
     private final LeaseRepository leaseRepository;
+    private  final UnitService unitService;
 
-    @Autowired
-    private UnitService unitService;
-
-    public LeaseService(LeaseRepository leaseRepository){
+    public LeaseService(LeaseRepository leaseRepository,
+                        UnitService unitService){
         this.leaseRepository = leaseRepository;
+        this.unitService = unitService;
     }
 
     public LeaseMapper fetchAllLeases(Long propertyId, Long unitId, int pageNo, int pageSize){

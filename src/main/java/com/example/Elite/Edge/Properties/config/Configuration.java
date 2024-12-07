@@ -70,7 +70,12 @@ public class Configuration {
 
             u2.setProperty(p2);
 
-            unitRepo.saveAll(List.of(u1,u2));
+            Units u3 = new Units("37", unitStatus.VACANT, "3", 6000, 900000.00, unitType.OFFICE, 5,
+                    5000.00);
+            u3.setProperty(p2);
+
+
+            unitRepo.saveAll(List.of(u1,u2,u3));
 
 
             //property owner and property relationship

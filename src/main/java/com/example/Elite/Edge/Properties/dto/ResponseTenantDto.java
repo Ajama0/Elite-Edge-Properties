@@ -28,6 +28,7 @@ public class ResponseTenantDto {
 
     private String Occupation;
 
+
     private Double income;
 
 
@@ -58,10 +59,7 @@ public class ResponseTenantDto {
         this.income = tenants.getIncome();
     }
 
-    public double getIncome(){
-        return income;
-    }
-
+  
     public Long getId() {
         return Id;
     }

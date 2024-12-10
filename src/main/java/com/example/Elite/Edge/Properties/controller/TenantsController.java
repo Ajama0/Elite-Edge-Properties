@@ -8,6 +8,7 @@ import com.example.Elite.Edge.Properties.model.Tenants;
 import com.example.Elite.Edge.Properties.model.Units;
 import com.example.Elite.Edge.Properties.service.TenantsService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
+import io.micrometer.common.lang.Nullable;
 import org.apache.coyote.Response;
 
 import org.springframework.http.HttpStatus;
@@ -81,6 +82,9 @@ public class TenantsController {
     }
 
 
+    @GetMapping(path = "")
+
+
 
     //Best practice is to typically return the id of a POST request
     @PostMapping(path = "create")
@@ -102,7 +106,7 @@ public class TenantsController {
      * @return custom api wrapper: return api wrapper with 200 response
      */
 
-    @PutMapping("update/email/{email}")
+    @PutMapping(path = "update/email/{email}")
     public ResponseEntity<ApiResponse<ResponseTenantDto>> updateTenantEmail(
             @PathVariable("email") String email,
             @RequestBody RequestTenantDto requestTenantDto
@@ -125,7 +129,7 @@ public class TenantsController {
      * @return custom api wrapper: return api wrapper with 200 response
      */
 
-    @PutMapping("update/income")
+    @PutMapping(path = "update/income")
     public ResponseEntity<ApiResponse<?>> updateTenantIncome(
             @RequestBody RequestTenantDto requestTenantDto,
             @RequestParam ("income") double income
@@ -133,6 +137,49 @@ public class TenantsController {
         ResponseTenantDto dto = tenantsService.updateIncome(requestTenantDto, income);
         return new ResponseEntity<>(new ApiResponse<>("success",dto),
              HttpStatus.OK);
+    }
+
+    /**
+     * updateTenantOccupation - allows the tenant to update their occupation/job
+     * @param tenantId: refers to the tenants id
+     * @param Occupation: the new occupation they wish to replace their previous one with
+     * return ResponseTenantDTO: return dto including only relevant info and hiding internals
+     */
+    @PutMapping(path = "update/occupation/{id}/{occupation}")
+    public ResponseEntity<ApiResponse<ResponseTenantDto>> updateTenantOccupation(
+            @PathVariable("id") Long tenantId,
+            @PathVariable("occupation") String Occupation
+    ){
+        ResponseTenantDto tenantDto = tenantsService.updateOccupation(tenantId, Occupation);
+        return new ResponseEntity<>(new ApiResponse<>("success", tenantDto),
+                HttpStatus.OK);
+    }
+
+
+    /**
+     * required : Boolean param which checks if tenants will return another unit, if so set their field to archived.
+     * archived tenants will be contacted to get an update on if they are still willing to rent a property
+     * deleteTenant - Tenants who are no longer rent a unit, will have their field set to deleted
+     * ideally this would be a left active if renting another unit in the property, otherwise soft delete
+     * we will remove the association between that unit and tenant
+     * and any lease associated to the unit with that tenant will be set to archived
+     * @param unitId: identifying the tenants unit
+     * @param tenantId : the tenants Identifier
+     * @param rentAgain: boolean value to see if the user will rent another unit in the property
+
+     */
+
+    @DeleteMapping("delete/unit")
+    public ResponseEntity<ApiResponse<?>> deleteTenant(
+            @RequestParam(value = "id") Long tenantId,
+            @RequestParam(value = "unit") Long unitId,
+            @RequestParam(value = "return") Boolean rentAgain
+
+    ){
+        Long tenant= tenantsService.deleteTenant(tenantId, unitId,rentAgain);
+        return new ResponseEntity<>(new ApiResponse<>("success", tenant),
+                HttpStatus.OK);
+
     }
 
 

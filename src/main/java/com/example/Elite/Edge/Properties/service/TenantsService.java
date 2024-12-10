@@ -4,13 +4,16 @@ import com.example.Elite.Edge.Properties.constants.Status;
 import com.example.Elite.Edge.Properties.constants.unitStatus;
 import com.example.Elite.Edge.Properties.dto.RequestTenantDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
+import com.example.Elite.Edge.Properties.exceptions.LeaseNotFoundException;
 import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.exceptions.TenantNotFoundException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.mapper.TenantMapper;
+import com.example.Elite.Edge.Properties.model.Lease;
 import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.model.Tenants;
 import com.example.Elite.Edge.Properties.model.Units;
+import com.example.Elite.Edge.Properties.repository.LeaseRepository;
 import com.example.Elite.Edge.Properties.repository.PropertyRepository;
 import com.example.Elite.Edge.Properties.repository.TenantRepository;
 import com.example.Elite.Edge.Properties.repository.UnitRepository;
@@ -29,13 +32,16 @@ public class TenantsService {
     private final TenantRepository tenantRepository;
     private final PropertyRepository propertyRepository;
 
+    private final LeaseRepository leaseRepository;
     private final UnitRepository unitRepository;
 
     public TenantsService(TenantRepository tenantRepository, PropertyRepository propertyRepository,
-                          UnitRepository unitRepository){
+                          UnitRepository unitRepository,
+                          LeaseRepository leaseRepository){
         this.tenantRepository = tenantRepository;
         this.propertyRepository = propertyRepository;
         this.unitRepository=unitRepository;
+        this.leaseRepository = leaseRepository;
     }
 
 
@@ -208,6 +214,78 @@ public class TenantsService {
         tenantRepository.save(tenant);
         ResponseTenantDto responseTenantDto = new ResponseTenantDto(tenant);
         return responseTenantDto;
+
+    }
+
+    public ResponseTenantDto updateOccupation(Long tenantId, String occupation) {
+        Tenants tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(()-> new TenantNotFoundException("Tenant with id " + tenantId + " does not exist"));
+
+        //ensure tenant id is not being replaced with the same occupation
+        if(tenant.getOccupation().equals(occupation)){
+            throw new IllegalArgumentException("please enter a different occupation");
+        }
+
+        tenant.setOccupation(occupation);
+        tenantRepository.save(tenant);
+
+        return new ResponseTenantDto(tenant.getId(), tenant.getFirstName(), tenant.getOccupation());
+    }
+
+
+    @Transactional
+    public Long deleteTenant(Long tenantId, Long unitId, Boolean rentAgain) {
+        Tenants tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(()-> new TenantNotFoundException("Tenant with id " + tenantId + " does not exist"));
+
+        Units getTenantUnit = tenant.getUnit();
+
+        if(getTenantUnit==null || !getTenantUnit.getId().equals(unitId) ) {
+            throw new UnitException("There are no units associated with Tenant: " + tenantId);
+        }
+
+        /**
+         *so assuming the rent again was checked as false and the tenant does not want to rent again
+         * remove his/hers current association with the unit, set their leases to deleted and set their status to deleted
+         */
+
+        //remove associations
+        tenant.setUnit(null);
+        getTenantUnit.setTenant(null);
+
+        if(rentAgain==null) {
+            //set the tenant status to deleted and set the unit status to vacant, also archive the lease
+            tenant.setTenantStatus(Status.DELETED);
+            getTenantUnit.setUnitStatus(unitStatus.VACANT);
+
+            Lease lease = leaseRepository.findAll()
+                    .stream()
+                    .filter(leases -> leases.getUnit().equals(getTenantUnit) && leases.getTenants().equals(tenant))
+                    .findFirst()
+                    .orElseThrow(() -> new LeaseNotFoundException("No lease found for given unit"));
+
+
+            lease.setStatus(Status.DELETED);
+        }
+
+        else{
+            //inactive status = will be used as historic data for the tenants
+            //we'd like to keep the tenant as active and keep their leases as inactive for now for future references.
+            tenant.setTenantStatus(Status.ACTIVE);
+            getTenantUnit.setUnitStatus(unitStatus.VACANT);
+
+            Lease lease = leaseRepository.findAll()
+                    .stream()
+                    .filter(leases -> leases.getUnit().equals(getTenantUnit) && leases.getTenants().equals(tenant
+                    ))
+                    .findFirst()
+                    .orElseThrow(() -> new LeaseNotFoundException("No lease found for given unit"));
+
+
+            lease.setStatus(Status.INACTIVE);
+        }
+
+        return tenantId;
 
     }
 }

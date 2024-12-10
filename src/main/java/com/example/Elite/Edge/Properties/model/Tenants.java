@@ -55,7 +55,7 @@ public class Tenants {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "unit_id", nullable = false)
+    @JoinColumn(name = "unit_id")
     private Units units;
 
     @OneToOne(mappedBy = "tenants")

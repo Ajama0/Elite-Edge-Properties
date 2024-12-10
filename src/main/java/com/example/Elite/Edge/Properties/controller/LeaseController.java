@@ -40,4 +40,6 @@ public class LeaseController {
 
     }
 
+    @GetMapping(value="/tenants")
+
 }

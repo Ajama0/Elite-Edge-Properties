@@ -173,11 +173,11 @@ public class TenantsController {
     public ResponseEntity<ApiResponse<?>> deleteTenant(
             @RequestParam(value = "id") Long tenantId,
             @RequestParam(value = "unit") Long unitId,
-            @RequestParam(value = "return") Boolean rentAgain
+            @RequestParam(value = "rentAgain", required = false) Boolean rentAgain
 
     ){
         Long tenant= tenantsService.deleteTenant(tenantId, unitId,rentAgain);
-        return new ResponseEntity<>(new ApiResponse<>("success", tenant),
+        return new ResponseEntity<>(new ApiResponse<>("successfully deleted ", tenant),
                 HttpStatus.OK);
 
     }

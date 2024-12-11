@@ -48,7 +48,13 @@ public class LeaseController {
 
     }
 
-    //assume after endpoint /All we get all the leases associated to a unit, from here we can select a lease id, and find the payment history of that lease
+
+
+    /**
+     * //assume after endpoint /All we get all the leases associated to a unit, from here we can select a lease id, and find the payment history of that lease
+     * @param LeaseId : the lease id we will fetch payments for
+     * @return : paymentDto to hide internals
+     */
     @GetMapping(value = "payment/history")
     public ResponseEntity<ApiResponse<?>> retrieveLeasePayments(
             @RequestParam("id") Long LeaseId
@@ -58,5 +64,7 @@ public class LeaseController {
                 HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "Active")
 
 }

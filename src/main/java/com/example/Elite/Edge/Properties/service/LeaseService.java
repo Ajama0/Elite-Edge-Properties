@@ -4,6 +4,7 @@ package com.example.Elite.Edge.Properties.service;
 import com.example.Elite.Edge.Properties.dto.LeaseDto;
 import com.example.Elite.Edge.Properties.dto.PaymentDto;
 import com.example.Elite.Edge.Properties.exceptions.LeaseNotFoundException;
+import com.example.Elite.Edge.Properties.exceptions.PaymentNotFoundException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.mapper.LeaseMapper;
 import com.example.Elite.Edge.Properties.model.Lease;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,8 +81,20 @@ public class LeaseService {
 
 
     public List<PaymentDto> fetchLeasePayment(Long leaseId) {
-        return null;
+        //validate lease is present
+        Lease lease = leaseRepository.findById(leaseId)
+                .orElseThrow(()-> new LeaseNotFoundException("Lease with id " + leaseId + " does not exist"));
 
 
+        List<PaymentDto> paymentDtoList = Optional.ofNullable(lease.getPayments())
+                .orElseThrow(()->new PaymentNotFoundException("There are no payments for this lease"))
+                .stream()
+                .map(PaymentDto::new)
+                .toList();
+
+        if(paymentDtoList.isEmpty()){
+            throw new PaymentNotFoundException("There are no payments for this lease");
+        }
+        return paymentDtoList;
     }
 }

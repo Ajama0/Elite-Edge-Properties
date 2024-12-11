@@ -1,6 +1,6 @@
 package com.example.Elite.Edge.Properties.constants;
 
-public enum unitType {
+public enum UnitType {
     APARTMENT,
     STUDIO,
     OFFICE,

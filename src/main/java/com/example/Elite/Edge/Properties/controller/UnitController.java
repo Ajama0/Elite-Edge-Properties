@@ -1,17 +1,16 @@
 package com.example.Elite.Edge.Properties.controller;
 
 import com.example.Elite.Edge.Properties.constants.Status;
-import com.example.Elite.Edge.Properties.constants.unitStatus;
+import com.example.Elite.Edge.Properties.constants.UnitStatus;
 import com.example.Elite.Edge.Properties.dto.LeaseDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.dto.UnitDto;
-import com.example.Elite.Edge.Properties.constants.unitType;
+import com.example.Elite.Edge.Properties.constants.UnitType;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.model.Units;
 import com.example.Elite.Edge.Properties.service.UnitService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
 import jakarta.annotation.Nullable;
-import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -82,7 +81,7 @@ public class UnitController {
     @GetMapping(value = "property/units/e/type")
     public ResponseEntity<ApiResponse<Object>> fetchUnitType(
             @RequestParam Long id,
-            @RequestParam("unit_type") unitType Unittype
+            @RequestParam("unit_type") UnitType Unittype
             ){
         try{
             List<Units> units = unitService.retrieveByType(id, Unittype);
@@ -158,7 +157,7 @@ public class UnitController {
     public ResponseEntity<ApiResponse<Units>> updateUnitStatus(
             @RequestParam("id") Long propertyId,
             @RequestParam("id2") Long unitId,
-            @RequestParam ("status") unitStatus status
+            @RequestParam ("status") UnitStatus status
     ){
 
         Units updatedUnit = unitService.updateStatus(propertyId, unitId, status);

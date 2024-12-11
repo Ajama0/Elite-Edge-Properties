@@ -177,7 +177,7 @@ public class TenantsController {
 
     ){
         Long tenant= tenantsService.deleteTenant(tenantId, unitId,rentAgain);
-        return new ResponseEntity<>(new ApiResponse<>("successfully deleted ", tenant),
+        return new ResponseEntity<>(new ApiResponse<>("successfully deleted", tenant),
                 HttpStatus.OK);
 
     }

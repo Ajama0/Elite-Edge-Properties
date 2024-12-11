@@ -1,17 +1,10 @@
 package com.example.Elite.Edge.Properties.dto;
 
-import com.example.Elite.Edge.Properties.constants.Status;
-import com.example.Elite.Edge.Properties.constants.unitStatus;
-import com.example.Elite.Edge.Properties.constants.unitType;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 

@@ -60,17 +60,17 @@ public class Configuration {
             propertyRepo.saveAll(List.of(p1,p2));
 
             //units
-            Units u1 = new Units("101", unitStatus.VACANT, "5", 2000, 50000.00, unitType.STUDIO,
+            Units u1 = new Units("101", UnitStatus.VACANT, "5", 2000, 50000.00, UnitType.STUDIO,
                     2, 1500.00);
             u1.setProperty(p1);
 
 
-            Units u2 = new Units("102", unitStatus.OCCUPIED, "6", 2500, 55000.00, unitType.APARTMENT,
+            Units u2 = new Units("102", UnitStatus.OCCUPIED, "6", 2500, 55000.00, UnitType.APARTMENT,
                     3, 2000.00);
 
             u2.setProperty(p2);
 
-            Units u3 = new Units("37", unitStatus.VACANT, "3", 6000, 900000.00, unitType.OFFICE, 5,
+            Units u3 = new Units("37", UnitStatus.VACANT, "3", 6000, 900000.00, UnitType.OFFICE, 5,
                     5000.00);
             u3.setProperty(p2);
 
@@ -145,12 +145,15 @@ public class Configuration {
 
 
             //payments
-            Payments paym1 = new Payments("#TX-1BF332", 2000.00, paymentStatus.PENDING,
+            Payments paym1 = new Payments("#TX-1BF332", 2000.00, PaymentStatus.SUCCESS,
                     "8654");
 
+            Payments paym2 = new Payments("#TX-3CFF21", 2000.00, PaymentStatus.PENDING, "3361");
+
             paym1.setLease(l1);
-            l1.setPayments(List.of(paym1));
-            paymentsRepo.save(paym1);
+            paym2.setLease(l1);
+            l1.setPayments(List.of(paym1, paym2));
+            paymentsRepo.saveAll(List.of(paym1, paym2));
 
 
            //All instances saved to the db

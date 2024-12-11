@@ -1,7 +1,6 @@
 package com.example.Elite.Edge.Properties.dto;
 
-import com.example.Elite.Edge.Properties.constants.unitStatus;
-import com.example.Elite.Edge.Properties.constants.unitType;
+import com.example.Elite.Edge.Properties.constants.UnitStatus;
 import com.example.Elite.Edge.Properties.model.Units;
 
 public class UnitDto {
@@ -14,9 +13,9 @@ public class UnitDto {
 
     private double unitvalue;
 
-    private unitType UnitType;
+    private com.example.Elite.Edge.Properties.constants.UnitType UnitType;
 
-    private unitStatus Unitstatus;
+    private UnitStatus Unitstatus;
 
     private Integer numberofrooms;
 

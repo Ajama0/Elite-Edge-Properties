@@ -1,6 +1,6 @@
 package com.example.Elite.Edge.Properties.constants;
 
-public enum paymentStatus {
+public enum PaymentStatus {
     SUCCESS,
     FAILED,
     PENDING

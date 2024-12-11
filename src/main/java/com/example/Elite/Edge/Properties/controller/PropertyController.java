@@ -1,7 +1,7 @@
 package com.example.Elite.Edge.Properties.controller;
 
 
-import com.example.Elite.Edge.Properties.dto.PropertyDTO;
+import com.example.Elite.Edge.Properties.dto.PropertyDto;
 import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.model.PropertyOwner;
@@ -76,9 +76,9 @@ public class PropertyController {
     //allow buying a property -> adding to property owner
     //creating a property
     @PostMapping(path = "create-property")
-    public ResponseEntity<ApiResponse<PropertyDTO>>createProperty(@RequestBody PropertyDTO propertyDTO){
+    public ResponseEntity<ApiResponse<PropertyDto>>createProperty(@RequestBody PropertyDto propertyDTO){
        try {
-          PropertyDTO property = propertyservice.CreateProperty(propertyDTO);
+          PropertyDto property = propertyservice.CreateProperty(propertyDTO);
            return ResponseEntity.ok(new ApiResponse<>("successfully created!",
                    property
            ));
@@ -95,7 +95,7 @@ public class PropertyController {
     public ResponseEntity<ApiResponse<Object>>UpdatePrice(@PathVariable Long id,
             @PathVariable("price") double PropertyPrice){
         try{
-            PropertyDTO updatedProperty = propertyservice.PropertyPrice(id,
+            PropertyDto updatedProperty = propertyservice.PropertyPrice(id,
                     PropertyPrice);
 
             return ResponseEntity.ok(new ApiResponse<>("success" , updatedProperty));
@@ -114,7 +114,7 @@ public class PropertyController {
 
         String description = payload.get("description");
         try{
-            PropertyDTO propertyDTO = propertyservice.updateDescription(id, description);
+            PropertyDto propertyDTO = propertyservice.updateDescription(id, description);
             return ResponseEntity.ok(new ApiResponse<>("Successfully updated",
                     propertyDTO
                     ));

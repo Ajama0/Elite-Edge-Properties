@@ -2,6 +2,7 @@ package com.example.Elite.Edge.Properties.service;
 
 
 import com.example.Elite.Edge.Properties.dto.LeaseDto;
+import com.example.Elite.Edge.Properties.dto.PaymentDto;
 import com.example.Elite.Edge.Properties.exceptions.LeaseNotFoundException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.mapper.LeaseMapper;
@@ -73,6 +74,13 @@ public class LeaseService {
         );
 
         return leases;
+
+    }
+
+
+    public List<PaymentDto> fetchLeasePayment(Long leaseId) {
+        return null;
+
 
     }
 }

@@ -1,7 +1,7 @@
 package com.example.Elite.Edge.Properties.service;
 
 import com.example.Elite.Edge.Properties.constants.Status;
-import com.example.Elite.Edge.Properties.constants.unitStatus;
+import com.example.Elite.Edge.Properties.constants.UnitStatus;
 import com.example.Elite.Edge.Properties.dto.RequestTenantDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.exceptions.LeaseNotFoundException;
@@ -21,7 +21,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -139,7 +138,7 @@ public class TenantsService {
 
         Units unitExists = unitRepository.findById(unitId)
                 .orElseThrow(()-> new UnitException("This unit does not exist"));
-        if(!unitExists.getUnitStatus().equals(unitStatus.VACANT)){
+        if(!unitExists.getUnitStatus().equals(UnitStatus.VACANT)){
             throw new UnitException("please select a vacant unit.");
         }
 
@@ -149,7 +148,7 @@ public class TenantsService {
         tenant1.setAddress(unitExists.getProperty().getAddress());
         //assign this Tenant to a unit. The client should also add the unit we associate the tenant to
         tenant1.setUnit(unitExists);
-        unitExists.setUnitStatus(unitStatus.OCCUPIED);
+        unitExists.setUnitStatus(UnitStatus.OCCUPIED);
 
 
         tenantRepository.save(tenant1);
@@ -256,7 +255,7 @@ public class TenantsService {
         if(rentAgain==null) {
             //set the tenant status to deleted and set the unit status to vacant, also archive the lease
             tenant.setTenantStatus(Status.DELETED);
-            getTenantUnit.setUnitStatus(unitStatus.VACANT);
+            getTenantUnit.setUnitStatus(UnitStatus.VACANT);
 
             Lease lease = leaseRepository.findAll()
                     .stream()
@@ -272,7 +271,7 @@ public class TenantsService {
             //inactive status = will be used as historic data for the tenants
             //we'd like to keep the tenant as active and keep their leases as inactive for now for future references.
             tenant.setTenantStatus(Status.ACTIVE);
-            getTenantUnit.setUnitStatus(unitStatus.VACANT);
+            getTenantUnit.setUnitStatus(UnitStatus.VACANT);
 
             Lease lease = leaseRepository.findAll()
                     .stream()

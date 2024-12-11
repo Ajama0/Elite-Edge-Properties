@@ -1,8 +1,8 @@
 package com.example.Elite.Edge.Properties.model;
 
 
-import com.example.Elite.Edge.Properties.constants.unitStatus;
-import com.example.Elite.Edge.Properties.constants.unitType;
+import com.example.Elite.Edge.Properties.constants.UnitStatus;
+import com.example.Elite.Edge.Properties.constants.UnitType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 public class Units {
 
-    public Units(String unitNumber, unitStatus unitStatus, String floorNumber,
-                 double rentprice, double unitvalue, unitType unitType, Integer numberofrooms,
+    public Units(String unitNumber, UnitStatus unitStatus, String floorNumber,
+                 double rentprice, double unitvalue, UnitType unitType, Integer numberofrooms,
                  double deposit ){
         this.unitNumber = unitNumber;
         this.unitStatus = unitStatus;
@@ -56,7 +56,7 @@ public class Units {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "unit_status", nullable = false)
-    private unitStatus unitStatus;
+    private UnitStatus unitStatus;
 
     @Column(name = "Floor_number", nullable = false)
     private String FloorNumber;
@@ -69,7 +69,7 @@ public class Units {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "unit_type", nullable = false)
-    private unitType unitType; //whether it is an apartment, an office, studio etc
+    private UnitType unitType; //whether it is an apartment, an office, studio etc
 
     @Column(name = "number_of_rooms")
     private Integer numberofrooms;
@@ -108,7 +108,7 @@ public class Units {
         return unitNumber;
     }
 
-    public unitStatus getUnitStatus() {
+    public UnitStatus getUnitStatus() {
         return unitStatus;
     }
 
@@ -124,7 +124,7 @@ public class Units {
         return unitvalue;
     }
 
-    public unitType getUnitType() {
+    public UnitType getUnitType() {
         return unitType;
     }
 
@@ -160,7 +160,7 @@ public class Units {
         this.unitNumber = unitNumber;
     }
 
-    public void setUnitStatus(com.example.Elite.Edge.Properties.constants.unitStatus unitStatus) {
+    public void setUnitStatus(UnitStatus unitStatus) {
         this.unitStatus = unitStatus;
     }
 
@@ -176,7 +176,7 @@ public class Units {
         this.unitvalue = unitvalue;
     }
 
-    public void setUnitType(com.example.Elite.Edge.Properties.constants.unitType unitType) {
+    public void setUnitType(UnitType unitType) {
         this.unitType = unitType;
     }
 

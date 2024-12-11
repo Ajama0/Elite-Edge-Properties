@@ -6,7 +6,7 @@ import com.example.Elite.Edge.Properties.model.Property;
 
 import java.time.LocalDate;
 
-public class PropertyDTO {
+public class PropertyDto {
     //hide internals of the property entity from client
     private String address;
     private PropertyType propertyType;
@@ -22,9 +22,9 @@ public class PropertyDTO {
 
     private  Status status;
 
-    public PropertyDTO(String address, String propertyName, PropertyType propertyType,  double propertyValue, Boolean parkingAvailable, String city, String state,
-                            String zipcode, LocalDate purchaseDate, Integer rating,
-                            String propertyDescription, Status status) {
+    public PropertyDto(String address, String propertyName, PropertyType propertyType, double propertyValue, Boolean parkingAvailable, String city, String state,
+                       String zipcode, LocalDate purchaseDate, Integer rating,
+                       String propertyDescription, Status status) {
         this.address = address;
         this.propertyType = propertyType;
         this.propertyName = propertyName;
@@ -39,7 +39,7 @@ public class PropertyDTO {
         this.status = status;
     }
 
-    public PropertyDTO(Property property){
+    public PropertyDto(Property property){
         this.address = property.getAddress();
         this.propertyName = property.getPropertyname();
         this.propertyType = property.getPropertyType();

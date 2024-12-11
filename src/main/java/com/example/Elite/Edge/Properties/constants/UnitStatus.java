@@ -1,6 +1,6 @@
 package com.example.Elite.Edge.Properties.constants;
 
-public enum unitStatus {
+public enum UnitStatus {
    OCCUPIED, VACANT, UNDER_MAINTENANCE, ARCHIVED
 
 }

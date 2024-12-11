@@ -5,8 +5,8 @@ import com.example.Elite.Edge.Properties.dto.LeaseDto;
 import com.example.Elite.Edge.Properties.dto.ResponseTenantDto;
 import com.example.Elite.Edge.Properties.dto.UnitDto;
 import com.example.Elite.Edge.Properties.constants.Status;
-import com.example.Elite.Edge.Properties.constants.unitStatus;
-import com.example.Elite.Edge.Properties.constants.unitType;
+import com.example.Elite.Edge.Properties.constants.UnitStatus;
+import com.example.Elite.Edge.Properties.constants.UnitType;
 import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.exceptions.TenantNotFoundException;
@@ -54,7 +54,7 @@ public class UnitService {
 
         List<Units> archivedUnits = unitRepository.findAll()
                 .stream()
-                .filter(units-> units.getUnitStatus().equals(unitStatus.ARCHIVED))
+                .filter(units-> units.getUnitStatus().equals(UnitStatus.ARCHIVED))
                 .collect(Collectors.toList());
 
         if(archivedUnits.isEmpty()){
@@ -75,7 +75,7 @@ public class UnitService {
         //only retrieve units that haven't been soft deleted
         List<Units> associatedUnits = fetchProperty.getUnits().
                 stream().
-                filter(units -> !units.getUnitStatus().equals(unitStatus.ARCHIVED)).
+                filter(units -> !units.getUnitStatus().equals(UnitStatus.ARCHIVED)).
                 toList();
 
         if(associatedUnits.isEmpty()){
@@ -111,7 +111,7 @@ public class UnitService {
 
     }
 
-    public List<Units> retrieveByType(Long id, unitType type){
+    public List<Units> retrieveByType(Long id, UnitType type){
         //check if the property exist first
         Property validateProperty = propertyRepository.findById(id)
                 .orElseThrow(()->  new PropertyException("Property does not exist"));
@@ -181,8 +181,8 @@ public class UnitService {
                 unitDto.getDeposit()
                 );
 
-        unit.setUnitStatus(unitStatus.VACANT);
-        unit.setUnitType(unitType.APARTMENT);
+        unit.setUnitStatus(UnitStatus.VACANT);
+        unit.setUnitType(UnitType.APARTMENT);
         property.getUnits().add(unit);
         unit.setProperty(property);
 
@@ -245,7 +245,7 @@ public class UnitService {
 
 
     @Transactional
-    public Units updateStatus(Long propertyId, Long unitId, unitStatus status) {
+    public Units updateStatus(Long propertyId, Long unitId, UnitStatus status) {
         propertyExists(propertyId);
 
         //fetch unit for the property
@@ -256,7 +256,7 @@ public class UnitService {
             throw new UnitException(status + "is already set for the unit");
         }
 
-        if(status.equals(unitStatus.VACANT)){
+        if(status.equals(UnitStatus.VACANT)){
             //we'd like to disassociate the tenants automatically associated to that unit
             unit.getTenant().setTenantStatus(Status.DELETED);
             unit.setTenant(null);

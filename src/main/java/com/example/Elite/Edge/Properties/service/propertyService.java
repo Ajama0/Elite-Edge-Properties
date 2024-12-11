@@ -1,11 +1,11 @@
 package com.example.Elite.Edge.Properties.service;
 
 
-import com.example.Elite.Edge.Properties.dto.PropertyDTO;
+import com.example.Elite.Edge.Properties.dto.PropertyDto;
 import com.example.Elite.Edge.Properties.constants.PropertyType;
 import com.example.Elite.Edge.Properties.constants.Status;
 
-import com.example.Elite.Edge.Properties.constants.unitStatus;
+import com.example.Elite.Edge.Properties.constants.UnitStatus;
 import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.model.*;
 import com.example.Elite.Edge.Properties.repository.UnitRepository;
@@ -100,7 +100,7 @@ public class propertyService {
     }
 
     @Transactional
-    public PropertyDTO CreateProperty(PropertyDTO propertyDTO) {
+    public PropertyDto CreateProperty(PropertyDto propertyDTO) {
     //let's ensure the property doesn't already exist in our system
        Optional<Property>CheckDuplicate = PropertyRepository.findByPropertyNameAndAddress(propertyDTO.getPropertyName(),
                propertyDTO.getAddress());
@@ -127,11 +127,11 @@ public class propertyService {
 
             //Map the property back to a DTO to return to the client
 
-           return new PropertyDTO(savedProperty);
+           return new PropertyDto(savedProperty);
 
     }
 
-    public PropertyDTO PropertyPrice(Long id, double propertyValue) {
+    public PropertyDto PropertyPrice(Long id, double propertyValue) {
         Property property = PropertyRepository.findById(id)
                 .orElseThrow(() -> new PropertyException("property does not exist"));
 
@@ -143,11 +143,11 @@ public class propertyService {
             property.setPropertyvalue(propertyValue);
             Property property1 =  PropertyRepository.save(property);
 
-            return new PropertyDTO(property1);
+            return new PropertyDto(property1);
     }
 
     @Transactional
-    public PropertyDTO updateDescription(Long id, String description) {
+    public PropertyDto updateDescription(Long id, String description) {
         Property propertyId = PropertyRepository.findById(id)
                 .orElseThrow(()-> new PropertyException("id does not exist"));
 
@@ -159,7 +159,7 @@ public class propertyService {
 
         Property property  = PropertyRepository.save(propertyId);
 
-        return new PropertyDTO(property);
+        return new PropertyDto(property);
 
     }
 
@@ -178,7 +178,7 @@ public class propertyService {
         //we want to set all associated units to Archived, meaning not available
 
        List<Units> associatedUnits = property.getUnits();
-       associatedUnits.forEach(units -> units.setUnitStatus(unitStatus.ARCHIVED));
+       associatedUnits.forEach(units -> units.setUnitStatus(UnitStatus.ARCHIVED));
 
 
         associatedUnits.forEach(units -> {

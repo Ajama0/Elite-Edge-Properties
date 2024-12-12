@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface LeaseRepository extends JpaRepository<Lease,Long> {
 
@@ -17,4 +19,7 @@ public interface LeaseRepository extends JpaRepository<Lease,Long> {
                                             @Param("unitId") Long unitId,
                                             Pageable pageable);
 
+
+    @Query("SELECT l from Lease l WHERE  l.unit.id=:id1 AND l.tenants.id=:id2")
+    Lease leaseByUnitAndTenant(@Param("id1")Long unitId, @Param("id2") Long tenantId);
 }

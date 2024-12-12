@@ -1,16 +1,21 @@
 package com.example.Elite.Edge.Properties.service;
 
 
+import com.example.Elite.Edge.Properties.constants.Status;
 import com.example.Elite.Edge.Properties.dto.LeaseDto;
 import com.example.Elite.Edge.Properties.dto.PaymentDto;
 import com.example.Elite.Edge.Properties.exceptions.LeaseNotFoundException;
 import com.example.Elite.Edge.Properties.exceptions.PaymentNotFoundException;
+import com.example.Elite.Edge.Properties.exceptions.PropertyException;
 import com.example.Elite.Edge.Properties.exceptions.UnitException;
 import com.example.Elite.Edge.Properties.mapper.LeaseMapper;
 import com.example.Elite.Edge.Properties.model.Lease;
 import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.model.Units;
 import com.example.Elite.Edge.Properties.repository.LeaseRepository;
+import com.example.Elite.Edge.Properties.repository.PropertyRepository;
+import com.example.Elite.Edge.Properties.repository.UnitRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -27,16 +32,24 @@ import java.util.stream.Collectors;
 public class LeaseService {
 
     private final LeaseRepository leaseRepository;
-    private  final UnitService unitService;
+    private final PropertyRepository propertyRepository;
+
+    private final UnitRepository unitRepository;
 
     public LeaseService(LeaseRepository leaseRepository,
-                        UnitService unitService){
+                        PropertyRepository propertyRepository,
+                        UnitRepository unitRepository){
         this.leaseRepository = leaseRepository;
-        this.unitService = unitService;
+        this.propertyRepository = propertyRepository;
+        this.unitRepository = unitRepository;
+
     }
 
+    @Transactional
+
     public LeaseMapper fetchAllLeases(Long propertyId, Long unitId, int pageNo, int pageSize){
-        Property property = unitService.propertyExists(propertyId);
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(()-> new PropertyException("property does not exist"));
 
 
         Units unit = property.getUnits()
@@ -96,5 +109,51 @@ public class LeaseService {
             throw new PaymentNotFoundException("There are no payments for this lease");
         }
         return paymentDtoList;
+    }
+
+    @Transactional
+    public Object fetchTenantLeaseByUnit(Long unitId, Long tenantId) {
+        //ensure tenant exists, ensure unit exists, validate params
+        //if the client passes in both the unit and tenant, then the specific lease is returned
+       if(unitId!=null & tenantId!=null) {
+           Lease lease= leaseRepository.leaseByUnitAndTenant(unitId, tenantId);
+            new LeaseDto(lease);
+
+
+       }else if (tenantId==null && unitId!=null) {
+           // here we assume the client only includes the unit, hence they want all the leases of a unit
+           return leaseRepository.findAll()
+                   .stream()
+                   .filter(lease -> lease.getUnit().getId().equals(unitId))
+                   .map(LeaseDto::new)
+                   .toList();
+
+       } //this means the tenant id has been provided and we can return the lease associated to a tenant
+           return leaseRepository.findAll()
+                   .stream()
+                   .filter(lease -> lease.getTenants().getId().equals(tenantId))
+                   .map(LeaseDto::new)
+                   .findFirst()
+                   .orElseThrow(() -> new LeaseNotFoundException("Lease for tenant: " + tenantId + " does not exist"));
+
+    }
+
+    public List<LeaseDto> activeLeases(Long propertyId) {
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(()-> new PropertyException("property with id: " + propertyId + " does not exist"));
+
+        List<Units> units = property.getUnits();
+        List<LeaseDto> propertyLeases =  units.
+                stream()
+                .flatMap(units1 -> units1.getLease().stream())
+                .filter(leases -> leases.getStatus().equals(Status.ACTIVE))
+                .map(LeaseDto::new)
+                .toList();
+
+
+        return propertyLeases;
+
+
+
     }
 }

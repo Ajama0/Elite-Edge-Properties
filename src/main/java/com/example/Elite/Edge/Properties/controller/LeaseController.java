@@ -4,6 +4,7 @@ package com.example.Elite.Edge.Properties.controller;
 import com.example.Elite.Edge.Properties.dto.LeaseDto;
 import com.example.Elite.Edge.Properties.dto.PaymentDto;
 import com.example.Elite.Edge.Properties.mapper.LeaseMapper;
+import com.example.Elite.Edge.Properties.model.Lease;
 import com.example.Elite.Edge.Properties.service.LeaseService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
 import org.apache.coyote.Response;
@@ -64,7 +65,44 @@ public class LeaseController {
                 HttpStatus.OK);
     }
 
+    /**
+     *LeasePerTenantUnit: allows us to return the lease associated to a tenant and a unit
+     * @param unitId : The unit id passed to query the lease, if the unitId is not passed we return the lease associated to the tenant assuming tenant was passed
+     * @param tenantId : the tenant id being queried, assuming the tenantId was not passed, we return the leases associated to a unit. unit and lease 1:M
+     * @return Object : we can either return a list or a single object, hence the usage of Object return type as return type depends on client input
+     */
 
-    @GetMapping(value = "Active")
+    @GetMapping(value = "by/tenant/unit")
+    public ResponseEntity<ApiResponse<?>> LeasePerTenantUnit(
+            @RequestParam(value = "unit", required = false) Long unitId,
+            @RequestParam(value = "tenant", required = false) Long tenantId
+    ){
+        Object dto = leaseService.fetchTenantLeaseByUnit(
+                unitId, tenantId
+        );
+        return new ResponseEntity<>(new ApiResponse<>("success", dto),
+                HttpStatus.OK
+        );
+    }
+
+    /**
+     * activeLeasePerProperty: returns all current active leases in a property
+     * @param propertyId : represents the property in which we will query to return all the active Leases
+     * @return LeaseDto : return a list of lease dtos to hide internals
+     */
+    @GetMapping(path = "active/{id}")
+    public  ResponseEntity<ApiResponse<List<LeaseDto>>> activeLeasePerProperty(
+            @PathVariable("id") Long propertyId
+    ){
+        List<LeaseDto> activeLeases = leaseService.activeLeases(propertyId);
+        return new ResponseEntity<>(new ApiResponse<>("success", activeLeases),
+                HttpStatus.OK);
+    }
+
+
+
+
+
+
 
 }

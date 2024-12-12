@@ -114,11 +114,11 @@ public class Configuration {
 
             //leases
             Lease l1 = new Lease(LocalDate.of(2024, Month.SEPTEMBER, 19),
-                    LocalDate.of(2026, Month.MAY, 1),2000.00, 1500.00,60,"Agreement.pdf",
+                    LocalDate.of(2024, Month.DECEMBER, 22),2000.00, 1500.00,60,"Agreement.pdf",
                     Status.ACTIVE);
 
             Lease l2 = new Lease(LocalDate.of(2024, Month.NOVEMBER, 19),
-                    LocalDate.of(2026, Month.AUGUST, 1),2500.00, 2000.00,60,"Agreement.pdf",
+                    LocalDate.of(2024, Month.DECEMBER, 22),2500.00, 2000.00,60,"Agreement.pdf",
                     Status.ACTIVE);
 
             //extra 10 leases for unit 1 -> property 1

@@ -115,10 +115,9 @@ public class LeaseService {
     public Object fetchTenantLeaseByUnit(Long unitId, Long tenantId) {
         //ensure tenant exists, ensure unit exists, validate params
         //if the client passes in both the unit and tenant, then the specific lease is returned
-       if(unitId!=null & tenantId!=null) {
+       if(unitId!=null && tenantId!=null) {
            Lease lease= leaseRepository.leaseByUnitAndTenant(unitId, tenantId);
-            new LeaseDto(lease);
-
+           return new LeaseDto(lease);
 
        }else if (tenantId==null && unitId!=null) {
            // here we assume the client only includes the unit, hence they want all the leases of a unit
@@ -128,13 +127,20 @@ public class LeaseService {
                    .map(LeaseDto::new)
                    .toList();
 
-       } //this means the tenant id has been provided and we can return the lease associated to a tenant
+       }else if(tenantId!=null) {//this means the tenant id has been provided and we can return the lease associated to a tenant
+
            return leaseRepository.findAll()
                    .stream()
                    .filter(lease -> lease.getTenants().getId().equals(tenantId))
                    .map(LeaseDto::new)
                    .findFirst()
                    .orElseThrow(() -> new LeaseNotFoundException("Lease for tenant: " + tenantId + " does not exist"));
+       }
+
+       else{
+           return new LeaseNotFoundException("Please provide either a valid unit ID, tenant ID, or both") ;
+
+       }
 
     }
 

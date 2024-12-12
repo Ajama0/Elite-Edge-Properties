@@ -22,4 +22,9 @@ public interface LeaseRepository extends JpaRepository<Lease,Long> {
 
     @Query("SELECT l from Lease l WHERE  l.unit.id=:id1 AND l.tenants.id=:id2")
     Lease leaseByUnitAndTenant(@Param("id1")Long unitId, @Param("id2") Long tenantId);
+
+
+    @Query("SELECT l from Lease l WHERE l.unit.property.Id=?1 and l.status = com.example.Elite.Edge.Properties.constants.Status.ACTIVE")
+    List<Lease> findLeasesByProperty(Long id);
+
 }

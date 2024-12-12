@@ -173,7 +173,7 @@ public class Lease {
 
     public Lease(LocalDate startDate, LocalDate endDate, Double rentAmount, Double depositAmount,
                  Integer terminationNoticePeriod, String agreementDocument, Status leaseStatus) {
-        this.startDate = startDate;
+        this.startDate = LocalDate.now();
         this.endDate = endDate;
         this.rentAmount = rentAmount;
         this.depositAmount = depositAmount;

@@ -100,17 +100,22 @@ public class Configuration {
                     LocalDate.of(1994, Month.AUGUST,4),
                     "114 avenue rd", "Engineer", 60000.00, Status.ACTIVE);
 
-            Tenants t2 = new Tenants("holly", "jen", "holly@example.com", "+1(534)766 372",
+            Tenants t2 = new Tenants("holly", "jen", "holly@example.com", "+1(534)766 3721",
                     LocalDate.of(1997, Month.AUGUST,4),
                     "3 retherford way", "Teacher", 80000.00, Status.ACTIVE);
+
+            Tenants t3 = new Tenants("louis", "oakley", "louisO@gmail,com", "+1(543)987 1341", LocalDate.of(1980, Month.DECEMBER, 2),
+                    "Longlane ave", "Doctor", 200000.00, Status.ACTIVE);
+
 
 
             t1.setUnit(u1);
             u1.setTenant(t1);
             t2.setUnit(u2);
             u2.setTenant(t2);
+            t3.setUnit(u3);
 
-            tenantsRepo.saveAll(List.of(t1,t2));
+            tenantsRepo.saveAll(List.of(t1,t2,t3));
 
             //leases
             Lease l1 = new Lease(LocalDate.of(2024, Month.SEPTEMBER, 19),

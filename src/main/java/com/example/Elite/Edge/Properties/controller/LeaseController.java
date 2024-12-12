@@ -1,16 +1,22 @@
 package com.example.Elite.Edge.Properties.controller;
 
 
+import com.example.Elite.Edge.Properties.constants.Status;
 import com.example.Elite.Edge.Properties.dto.LeaseDto;
+import com.example.Elite.Edge.Properties.dto.LeaseRequestDto;
 import com.example.Elite.Edge.Properties.dto.PaymentDto;
 import com.example.Elite.Edge.Properties.mapper.LeaseMapper;
 import com.example.Elite.Edge.Properties.model.Lease;
+import com.example.Elite.Edge.Properties.model.Property;
 import com.example.Elite.Edge.Properties.service.LeaseService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -99,7 +105,61 @@ public class LeaseController {
                 HttpStatus.OK);
     }
 
+    /**
+     * LeaseBystatus: fetch the leases of a unit according to the status provided by the client
+     * @param propertyId: property id used to query the leases of units associated to a property
+     * @param unitId : the unit Id of the current status lease
+     * @param status : status enum we use to query what type of lease is to be returned
+     * @return ApiResponse wrapped in a 200 status code response
+     */
+    @GetMapping(path = "/status")
+    public ResponseEntity<ApiResponse<?>> leaseByStatus(
+            @RequestParam("property") Long propertyId,
+            @RequestParam("unit") Long unitId,
+            @RequestParam Status status){
 
+        List<LeaseDto> retrieveLeases = leaseService.leasesByStatus(propertyId, unitId, status);
+        return ResponseEntity.ok(new ApiResponse<>("success", retrieveLeases));
+    }
+
+    /**
+     * Expiring Leases, returns all expired leases that expire within 10 days from the current date
+     * @param propertyId : the property id used to query all expiring leases within a few days
+     * @return
+     */
+    @GetMapping(path = "/expiring/{property}")
+    public ResponseEntity<ApiResponse<List<LeaseDto>>> expiringLeases(
+            @PathVariable("property") Long propertyId
+    ){
+        List<LeaseDto> dueLeases = leaseService.fetchAllExpiringLeases(propertyId);
+        return new ResponseEntity<>(new ApiResponse<>("success", dueLeases),
+                HttpStatus.OK);
+    }
+
+    /**
+     *
+     * @param propertyId
+     * @param unitId
+     * @param tenantId
+     * @param leaseDto
+     * @return
+     */
+
+    @PostMapping(path = "create")
+    public ResponseEntity<ApiResponse<Long>> createLease(
+            @RequestParam("property") Long propertyId,
+            @RequestParam("unit")   Long unitId,
+            @RequestParam("tenant") Long tenantId,
+            @RequestBody  LeaseRequestDto leaseDto
+
+            ){
+        Long leaseId = leaseService.createLease(propertyId, unitId, tenantId, leaseDto);
+        return new ResponseEntity<>(new ApiResponse<>("successfully created", leaseId),
+                HttpStatus.CREATED);
+    }
+
+
+    @PutMapping(path = ")
 
 
 

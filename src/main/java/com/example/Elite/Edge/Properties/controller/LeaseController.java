@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -138,11 +139,11 @@ public class LeaseController {
 
     /**
      *
-     * @param propertyId
-     * @param unitId
-     * @param tenantId
-     * @param leaseDto
-     * @return
+     * @param propertyId: Property Id to query when creating the lease
+     * @param unitId : The unitId refers to the unit in which the lease is for
+     * @param tenantId : specific tenant associated with the lease
+     * @param leaseDto : LeaseRequestDto to hide internals of lease Entity
+     * @return Long: return the Id of the Lease as a Long data type
      */
 
     @PostMapping(path = "create")
@@ -158,11 +159,57 @@ public class LeaseController {
                 HttpStatus.CREATED);
     }
 
+    /**
+     * Update the status of a lease.
+     *
+     * @param leaseId the unique identifier of the lease to update
+     * @param status the new status to assign to the lease (e.g., ACTIVE, TERMINATED)
+     * @return ResponseEntity containing an ApiResponse with the updated LeaseDto and HTTP status
+     */
+    @PutMapping(path = "/change/status/{status}/{id}")
+    public ResponseEntity<ApiResponse<LeaseDto>> updateStatus(
+            @PathVariable("id") Long leaseId,
+            @PathVariable("status") Status status){
+        LeaseDto updatedLease = leaseService.updateStatus(leaseId, status);
+        return new ResponseEntity<>(new ApiResponse<>("success",updatedLease),
+                HttpStatus.OK);
 
-    @PutMapping(path = ")
+    }
+
+    /**
+     * Update the ending date of a lease.
+     *
+     * @param leaseId the unique identifier of the lease to update
+     * @param endingDate the new ending date for the lease (must be a valid future date)
+     * @return ResponseEntity containing an ApiResponse with the updated LeaseDto and HTTP status
+     */
+    @PutMapping(path = "update/end/date/{id}/{date}")
+    public ResponseEntity<ApiResponse<LeaseDto>>  updateDate(
+            @PathVariable("id") Long leaseId,
+            @PathVariable("date")LocalDate endingDate
+            ){
+        LeaseDto updatedDateLease = leaseService.updateDate(leaseId, endingDate);
+        return ResponseEntity.ok(new ApiResponse<>("success", updatedDateLease));
+    }
 
 
+    /**
+     * Update the rent amount for a lease.
+     *
+     * @param leaseId the unique identifier of the lease to update
+     * @param rentAmount the new rent amount to set
+     * @return ResponseEntity containing an ApiResponse with the updated LeaseDto and HTTP status
+     */
+    @PutMapping(path = "/update/rent/{id}/{amount}")
+    public ResponseEntity<ApiResponse<LeaseDto>> updateRentAmount(
+            @PathVariable("id") Long leaseId,
+            @PathVariable("amount") Double rentAmount
+    ) {
+        LeaseDto updatedLease = leaseService.updateRentAmount(leaseId, rentAmount);
+        return ResponseEntity.ok(new ApiResponse<>("Rent amount updated successfully", updatedLease));
+    }
 
+    //@DeleteMapping(path = "delete")
 
 
 }

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 
 
 @NoArgsConstructor
@@ -23,12 +24,15 @@ public class LeaseDto {
     private Status status;
     private String AgreementPdf;
 
+    private LocalDate date;
+
 
 
     public LeaseDto(Lease lease){
         this.id = lease.getId();
         this.status = lease.getStatus();
         this.AgreementPdf = lease.getAgreementDocument();
+        this.date = lease.getEndDate();
     }
 
 

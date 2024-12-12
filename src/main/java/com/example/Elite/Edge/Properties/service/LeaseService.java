@@ -192,7 +192,7 @@ public class LeaseService {
 
     }
 
-
+    @Transactional
     public List<LeaseDto> fetchAllExpiringLeases(Long propertyId) {
         Property property = propertyRepository.findById(propertyId)
                 .orElseThrow(() -> new PropertyException("property with id : " + propertyId + " does not exist"));
@@ -209,7 +209,6 @@ public class LeaseService {
                 .collect(Collectors.toList());
 
         return leaseDtos;
-
 
     }
 
@@ -249,5 +248,62 @@ public class LeaseService {
 
     }
 
+
+    public LeaseDto updateStatus(Long leaseId, Status status) {
+        Lease fetchLease = leaseRepository.findById(leaseId)
+                .orElseThrow(()-> new LeaseNotFoundException("lease with id: " + leaseId + " does not exist"));
+
+        if(fetchLease.getStatus().equals(status)){
+            throw new IllegalArgumentException("Please select a different option");
+        }
+        fetchLease.setStatus(status);
+        Lease lease = leaseRepository.save(fetchLease);
+
+        return new LeaseDto(lease);
+    }
+
+
+    public LeaseDto updateDate(Long leaseId, LocalDate endingDate) {
+        Lease findLease = leaseRepository.findById(leaseId)
+                .orElseThrow(()-> new LeaseNotFoundException("lease with id: " + leaseId + " does not exist"));
+
+        if(endingDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("please enter a valid date");
+
+        }if(findLease.getEndDate().equals(endingDate))  {
+            throw new IllegalArgumentException("The date must be different to the one set for the current lease");
+        }
+
+        if (!findLease.getStatus().equals(Status.ACTIVE)) {
+            throw new IllegalArgumentException("Cannot update the end date for a non-active lease.");
+            }
+
+        findLease.setEndDate(endingDate);
+        Lease saveLease = leaseRepository.save(findLease);
+        return new LeaseDto(saveLease);
+
+        }
+
+
+    @Transactional
+    public LeaseDto updateRentAmount(Long leaseId, Double rentAmount) {
+        // Validate the lease exists
+        Lease lease = leaseRepository.findById(leaseId)
+                .orElseThrow(() -> new LeaseNotFoundException("Lease with id: " + leaseId + " does not exist"));
+
+        // Validate the new rent amount
+        if (rentAmount == null || rentAmount <= 0) {
+            throw new IllegalArgumentException("Please provide a valid rent amount greater than 0");
+        }
+
+        // Avoid unnecessary updates
+        if (lease.getRentAmount().equals(rentAmount)) {
+            throw new IllegalArgumentException("The new rent amount is the same as the current rent amount");
+        }
+
+        lease.setRentAmount(rentAmount);
+        leaseRepository.save(lease);
+        return new LeaseDto(lease);
+    }
 
 }

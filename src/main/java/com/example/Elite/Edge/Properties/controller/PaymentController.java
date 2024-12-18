@@ -2,6 +2,7 @@ package com.example.Elite.Edge.Properties.controller;
 
 
 import com.example.Elite.Edge.Properties.dto.PaymentDto;
+import com.example.Elite.Edge.Properties.mapper.PaymentMapper;
 import com.example.Elite.Edge.Properties.service.PaymentService;
 import com.example.Elite.Edge.Properties.wrapper.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -48,12 +49,12 @@ public class PaymentController {
      */
 
     @GetMapping(path = "history")
-    public ResponseEntity<ApiResponse<PaymentDto>> paymentHistory(
+    public ResponseEntity<ApiResponse<PaymentMapper>> paymentHistory(
             @RequestParam("id") Long propertyId,
             @RequestParam(value = "pageNo", defaultValue = "0" , required = false) Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "100", required = false) Integer pageSize
     ){
-        PaymentDto paymHistory = paymentService.paymentHistory(propertyId, pageNo, pageSize);
+        PaymentMapper paymHistory = paymentService.paymentHistory(propertyId, pageNo, pageSize);
         return ResponseEntity.ok(new ApiResponse<>("success", paymHistory));
     }
 

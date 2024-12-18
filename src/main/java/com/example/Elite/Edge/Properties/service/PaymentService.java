@@ -5,6 +5,7 @@ import com.example.Elite.Edge.Properties.constants.PaymentStatus;
 import com.example.Elite.Edge.Properties.dto.PaymentDto;
 import com.example.Elite.Edge.Properties.exceptions.LeaseNotFoundException;
 import com.example.Elite.Edge.Properties.exceptions.PaymentNotFoundException;
+import com.example.Elite.Edge.Properties.mapper.PaymentMapper;
 import com.example.Elite.Edge.Properties.model.Lease;
 import com.example.Elite.Edge.Properties.model.Payments;
 import com.example.Elite.Edge.Properties.model.Property;
@@ -13,6 +14,7 @@ import com.example.Elite.Edge.Properties.repository.PaymentRepository;
 import com.example.Elite.Edge.Properties.repository.PropertyRepository;
 import jakarta.el.PropertyNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +25,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PaymentService {
+
 
     private final PaymentRepository paymentRepository;
     private final LeaseRepository leaseRepository;
@@ -58,7 +62,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentDto paymentHistory(Long propertyId, Integer pageNo, Integer pageSize){
+    public PaymentMapper paymentHistory(Long propertyId, Integer pageNo, Integer pageSize){
         //ensure user selects a valid property
         Property fetchProperty = propertyRepository.findById(propertyId)
                 .orElseThrow(()-> new PropertyNotFoundException("please select a valid property"));
@@ -78,16 +82,21 @@ public class PaymentService {
         List<PaymentDto> paymList= payments.getContent().
                 stream().
                 filter(payments1 -> payments1.getStatus().equals(PaymentStatus.SUCCESS))
-                .map(p->new PaymentDto())
+                .map(p->new PaymentDto(p))
                 .toList();
+        log.info("--------------------------------------------------------");
+        log.info("the current payment list is " + paymList);
 
-        //pass in the values for paymentDTO
-        PaymentDto paymentDto = new PaymentDto();
-        paymentDto.setContent(paymList);
-        paymentDto.setTotalElements(payments.getTotalElements());
-        paymentDto.setPageNo(payments.getNumber());
 
-        return paymentDto;
+        PaymentMapper paymentMapper = new PaymentMapper(
+                paymList,
+                payments.getNumber(),
+                payments.getTotalElements(),
+                payments.isLast()
+
+
+        );
+        return paymentMapper;
     }
 
 

@@ -22,10 +22,6 @@ public class PaymentDto {
     private Double amount;
     private LocalDate date;
 
-    private Long id;
-    private List<PaymentDto> content;
-    private Integer pageNo;
-    private Long totalElements;
 
 
 
@@ -36,6 +32,10 @@ public class PaymentDto {
         this.amount = payments.getAmount();
         this.date = payments.getDate();
     }
+
+
+
+
 
 
 

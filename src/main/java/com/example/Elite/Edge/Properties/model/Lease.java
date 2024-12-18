@@ -62,7 +62,7 @@ public class Lease {
     private Tenants tenants;
 
     //payment and leases
-    @OneToMany(mappedBy = "lease", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lease")
     private List<Payments> payments = new ArrayList<>();
 
     public Long getId() {

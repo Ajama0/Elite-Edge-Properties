@@ -2,11 +2,13 @@ package com.example.Elite.Edge.Properties.model;
 
 import com.example.Elite.Edge.Properties.constants.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @NoArgsConstructor
+
 @Entity
 public class Payments {
 
@@ -49,6 +51,16 @@ public class Payments {
         this.status = status;
         this.cardLastFour = cardLastFour;
         this.date = LocalDate.now();
+    }
+
+    public Payments(String paymentReference, Double amount, PaymentStatus status,
+                    String cardLastFour, LocalDate date, Lease lease) {
+        this.paymentReference = paymentReference;
+        this.amount = amount;
+        this.status = status;
+        this.cardLastFour = cardLastFour;
+        this.date = date;
+        this.lease = lease;
     }
 
     public LocalDate getDate() {

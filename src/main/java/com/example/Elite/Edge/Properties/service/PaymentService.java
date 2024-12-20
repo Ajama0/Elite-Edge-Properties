@@ -3,6 +3,7 @@ package com.example.Elite.Edge.Properties.service;
 
 import com.example.Elite.Edge.Properties.constants.PaymentStatus;
 import com.example.Elite.Edge.Properties.dto.PaymentDto;
+import com.example.Elite.Edge.Properties.dto.RequestPaymentDto;
 import com.example.Elite.Edge.Properties.exceptions.LeaseNotFoundException;
 import com.example.Elite.Edge.Properties.exceptions.PaymentNotFoundException;
 import com.example.Elite.Edge.Properties.mapper.PaymentMapper;
@@ -20,9 +21,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -100,5 +103,28 @@ public class PaymentService {
     }
 
 
+    public String createPayment(Long leaseId, RequestPaymentDto requestPaymentDto) {
+        //initially ensure client entered a correct lease Id
+        Lease lease = leaseRepository.findById(leaseId)
+                .orElseThrow(() -> new LeaseNotFoundException("please re-check you have entered the correct lease id"));
 
+        if(requestPaymentDto.getAmount()<=0.00){
+            throw new PaymentNotFoundException("There was an error processing your payment");
+    }
+
+        //generate a random String payment
+        String randomString = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        Payments payments = new Payments(
+                randomString,
+                requestPaymentDto.getAmount(),
+                PaymentStatus.PENDING,
+                requestPaymentDto.getCardLastFour(),
+                LocalDate.now(),
+                lease
+
+        );
+
+        return randomString;
+
+    }
 }

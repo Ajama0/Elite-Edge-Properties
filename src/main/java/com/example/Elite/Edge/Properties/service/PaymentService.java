@@ -102,7 +102,7 @@ public class PaymentService {
         return paymentMapper;
     }
 
-    @
+    @Transactional
     public String createPayment(Long leaseId, RequestPaymentDto requestPaymentDto) {
         //initially ensure client entered a correct lease Id
         Lease lease = leaseRepository.findById(leaseId)

@@ -1,1 +1,1 @@
-# Equity Edge Properties
+# Elite Edge Properties

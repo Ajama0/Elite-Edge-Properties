@@ -102,7 +102,7 @@ public class PaymentService {
         return paymentMapper;
     }
 
-
+    @
     public String createPayment(Long leaseId, RequestPaymentDto requestPaymentDto) {
         //initially ensure client entered a correct lease Id
         Lease lease = leaseRepository.findById(leaseId)
@@ -123,6 +123,8 @@ public class PaymentService {
                 lease
 
         );
+
+        paymentRepository.save(payments);
 
         return randomString;
 
